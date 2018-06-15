@@ -26,7 +26,7 @@ string ReadInput(void)
 
 	getline(cin, input);
 	transform(input.begin(), input.end(), input.begin(), tolower);
-	cout << "  ";
+	cout << endl << "  ";
 
 	return input;
 }
@@ -49,6 +49,8 @@ int main(void)
 	
 	while (1)
 	{
+		cout << endl << "  ";
+
 		input = ReadInput();
 
 		if (input == "exit") break;

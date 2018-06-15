@@ -2,11 +2,15 @@
 
 #include <iostream>
 
+#include "item.h"
+#include "container.h"
+
 World::World(void) 
 {
 	Entity* lake = new Entity("lake", "You find yourself in a beautiful lake.");
-	Entity* lake_box = new Entity("box", "the box is closed.", "There is a small box on the floor.", lake);
-	
+	Container* lake_box = new Container("box", "You can see the contents of the box.", "The box is closed.", false, "There is a small box on the floor.", true, lake);
+	Item* letter = new Item("letter", "Thank you for playing the game! \n  - Jordi Tudela", "There is a letter.", false, lake_box);
+
 	this->zones.push_back(lake);
 	this->current = lake;
 

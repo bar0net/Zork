@@ -10,8 +10,10 @@ using namespace std;
 class Entity 
 {
 	public:
+		bool visible;
+
 		Entity(std::string name, std::string description);
-		Entity(string name, string description, string placementText, Entity* parent);
+		// Entity(string name, string description, string placementText, Entity* parent);
 
 		~Entity();
 		
@@ -27,13 +29,11 @@ class Entity
 		virtual void Drop(void);
 		virtual void Use(void);
 
-		void SeeContents(void);
+		virtual void SeeContents(void);
 
-	private:
+	protected:
 		string name;
 		string descritption;
-		string placementText;
-		bool visible;
 		list<Entity*> contains;
 };
 

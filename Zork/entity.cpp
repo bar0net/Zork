@@ -5,21 +5,10 @@ Entity::Entity(std::string name, std::string description)
 {
 	this->name = name;
 	this->descritption = description;
-	this->placementText = "";
 	this->visible = true;
 	this->contains = {};
 }
 
-Entity::Entity(std::string name, std::string description, string placementText, Entity* parent)
-{
-	this->name = name;
-	this->descritption = description;
-	this->placementText = placementText;
-	this->visible = true;
-	this->contains = {};
-
-	parent->Add(this);
-}
 
 Entity::~Entity()
 {
@@ -110,7 +99,7 @@ void Entity::Use(void)
 
 void Entity::SeeContents(void) 
 {
-	if (!this->visible) return;
+	//if (!this->visible) return;
 
-	cout << this->placementText << endl << "  ";
+	//cout << this->placementText << endl << "  ";
 }
