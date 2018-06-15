@@ -2,6 +2,10 @@
 #include <algorithm>
 #include <string>
 
+#include "world.h"
+#include "controller.h"
+#include "globals.h"
+
 using namespace std;
 
 // Things to be done at the begining of the game
@@ -37,15 +41,20 @@ void End(void)
 
 int main(void)
 {
-	string input;
-
 	Start();
 
+	string input;
+	World* world = new World;
+	Controller controller;
+	
 	while (1)
 	{
 		input = ReadInput();
 
 		if (input == "exit") break;
+
+		ParsedInput msg = controller.Parse(input, world->Visible());
+		world->Update(msg);
 	}
 
 	End();
