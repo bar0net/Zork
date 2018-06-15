@@ -9,6 +9,17 @@ Controller::Controller()
 	translate["walk"] = go;
 	translate["run"] = go;
 
+	translate["open"] = open;
+
+	translate["close"] = close;
+
+	translate["use"] = use;
+
+	translate["take"] = take;
+	translate["grab"] = take;
+
+	translate["drop"] = drop;
+
 	for (map<string, Actions>::iterator it = translate.begin(); it != translate.cend(); ++it)
 		this->commands.push_back(it->first);
 }

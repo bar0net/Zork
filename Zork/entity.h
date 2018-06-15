@@ -11,7 +11,7 @@ class Entity
 {
 	public:
 		Entity(std::string name, std::string description);
-		Entity(string name, string description, Entity* parent);
+		Entity(string name, string description, string placementText, Entity* parent);
 
 		~Entity();
 		
@@ -21,10 +21,18 @@ class Entity
 
 		virtual void Look(void);
 		virtual void Go(void);
+		virtual void Open(void);
+		virtual void Close(void);
+		virtual void Take(void);
+		virtual void Drop(void);
+		virtual void Use(void);
+
+		void SeeContents(void);
 
 	private:
 		string name;
 		string descritption;
+		string placementText;
 		bool visible;
 		list<Entity*> contains;
 };

@@ -4,7 +4,7 @@
 
 #include <string>
 
-enum Actions { none, look, go};
+enum Actions { none, look, go, open, close, use, take, drop};
 
 struct ParsedInput 
 {
