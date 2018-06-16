@@ -27,7 +27,9 @@ class Entity
 		virtual void Close(void);
 		virtual void Take(void);
 		virtual void Drop(void);
-		virtual void Use(void);
+		virtual void Use();
+		virtual void Use(Entity* recipient);
+		virtual void UsedOn(void) {};
 
 		virtual void SeeContents(void);
 

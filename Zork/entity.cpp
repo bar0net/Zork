@@ -92,7 +92,12 @@ void Entity::Drop(void)
 }
 
 
-void Entity::Use(void) 
+void Entity::Use(void)
+{
+	cout << "That is simply not possible." << endl << "  ";
+}
+
+void Entity::Use(Entity* recipient)
 {
 	cout << "That is simply not possible." << endl << "  ";
 }

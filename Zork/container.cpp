@@ -2,17 +2,24 @@
 
 #include <iostream>
 
-Container::Container(string name, string openText, string closedText, bool isOpen, string placementText, bool visible, Entity* parent) :
-	Item(name, openText, placementText, visible, parent)
+Container::Container(string name, string lockedText, bool isLocked, string openText, string closedText, bool isOpen, string placementText, bool visible, Entity* parent) :
+	Item(name, lockedText, placementText, visible, parent)
 {
 	this->isOpen = isOpen;
+	this->isLocked = isLocked;
 
-	if (isOpen)	this->otherText = closedText;
-	else 
+	if (isOpen)
 	{
-		this->descritption = closedText;
+		this->unlockText = openText;
+		this->otherText = closedText;
+	}
+	else
+	{
+		this->unlockText = closedText;
 		this->otherText = openText;
 	}
+		
+	if (!isLocked) this->descritption = this->unlockText;
 }
 
 
@@ -24,6 +31,12 @@ Container::~Container()
 
 void Container::Open(void)
 {
+	if (isLocked)
+	{
+		cout << "It's locked." << endl << "  ";
+		return;
+	}
+
 	if (isOpen)
 		cout << "It's already open." << endl << "  ";
 	else
@@ -61,4 +74,13 @@ void Container::ToogleContentVisibility(bool visible)
 {
 	for (list<Entity*>::iterator it = contains.begin(); it != contains.cend(); ++it)
 		(*it)->visible = visible;
+}
+
+void Container::UsedOn(void)
+{
+	if (isLocked) 
+	{
+		isLocked = false;
+		this->descritption = this->unlockText;
+	}
 }
