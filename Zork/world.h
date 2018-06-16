@@ -10,15 +10,21 @@
 class World
 {
 	public:
+		// Constructor & Destructor
 		World();
 		~World();
 
+		// Things to do every frame
 		void Update(ParsedInput msg);
 
+		// Return the list of visible entities in the current zone
 		list<string> Visible() { return current->Visible(); };
 
 	private:
+		// list of zones in this world
 		list<Entity*> zones;
+
+		// zone where the player is standing
 		Entity* current;
 };
 

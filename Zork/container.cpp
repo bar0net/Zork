@@ -2,6 +2,7 @@
 
 #include <iostream>
 
+// Constructor
 Container::Container(string name, string lockedText, bool isLocked, string openText, string closedText, bool isOpen, string placementText, bool visible, Entity* parent) :
 	Object(name, lockedText, placementText, visible, parent)
 {
@@ -23,12 +24,11 @@ Container::Container(string name, string lockedText, bool isLocked, string openT
 }
 
 
-Container::~Container()
-{
-
-}
+// Destructor
+Container::~Container() {}
 
 
+// ACTION: Open
 void Container::Open(void)
 {
 	if (isLocked)
@@ -49,6 +49,8 @@ void Container::Open(void)
 	}
 }
 
+
+// ACTION: Close
 void Container::Close(void)
 {
 	if (isOpen)
@@ -63,19 +65,9 @@ void Container::Close(void)
 		cout << "It's already closed." << endl << "  ";
 }
 
-void Container::SwapDescription(void)
-{
-		string dummy = this->descritption;
-		this->descritption = this->otherText;
-		this->otherText = dummy;
-}
 
-void Container::ToogleContentVisibility(bool visible)
-{
-	for (list<Entity*>::iterator it = contains.begin(); it != contains.cend(); ++it)
-		(*it)->visible = visible;
-}
-
+// ACTION: is the recipient of Use
+// The container should be unlocked if the appropiate key is used on it
 void Container::UsedOn(void)
 {
 	if (isLocked) 
@@ -83,4 +75,22 @@ void Container::UsedOn(void)
 		isLocked = false;
 		this->descritption = this->unlockText;
 	}
+}
+
+
+// Swap entity's description and otherText
+void Container::SwapDescription(void)
+{
+		string dummy = this->descritption;
+		this->descritption = this->otherText;
+		this->otherText = dummy;
+}
+
+
+// Sets all contained entities visibility to 'visible'
+// #visible: whether the contained items should be visible or not
+void Container::ToogleContentVisibility(bool visible)
+{
+	for (list<Entity*>::iterator it = contains.begin(); it != contains.cend(); ++it)
+		(*it)->visible = visible;
 }

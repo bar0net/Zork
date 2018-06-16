@@ -4,8 +4,10 @@
 
 #include <string>
 
+// List of allowed actions
 enum Actions { none, look, go, open, close, use, take, drop};
 
+// Format for parsed input
 struct ParsedInput 
 {
 	public: 

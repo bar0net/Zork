@@ -3,7 +3,9 @@
 
 Controller::Controller() 
 {
+	// associate key words with allowed action
 	translate["look"] = look;
+	translate["read"] = look;
 
 	translate["go"] = go;
 	translate["walk"] = go;
@@ -29,11 +31,16 @@ Controller::~Controller()
 
 }
 
+// Transform input text to a convinient format
+// #input: lowercase input text
+// #targets: list of visible entities that can be the target of the action
+// @returns: conviniently formated input
 ParsedInput Controller::Parse(string input, list<string> targets)
 {
 	ParsedInput output;
 
 	// Get the action
+	// we asume the action is the first word of the input
 	for (list<string>::iterator it = commands.begin(); it != commands.cend(); ++it)
 	{
 		int length = (*it).size();

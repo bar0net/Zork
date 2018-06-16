@@ -2,6 +2,7 @@
 
 #include <iostream>
 
+// Constructor
 Object::Object(string name, string description, string placementText, bool visible, Entity* parent) :
 Entity(name, description)
 {
@@ -11,8 +12,10 @@ Entity(name, description)
 	parent->Add(this);
 }
 
+// Destructor
 Object::~Object() {}
 
+// Display its placement text
 void Object::SeeContents(void)
 {
 	if (!this->visible) return;

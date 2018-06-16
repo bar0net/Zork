@@ -7,20 +7,30 @@
 
 using namespace std;
 
+// Anything that is physically present in the game world
 class Entity 
 {
 	public:
+		// player can only see visible entities when looking
 		bool visible;
 
+		// Constructor & Destructor
 		Entity(std::string name, std::string description);
-		// Entity(string name, string description, string placementText, Entity* parent);
-
 		~Entity();
 		
-		void Add(Entity* entity);
+		// Checks itself and its contents for an entity with name "name"
+		// returns that entity if it exists
+		// returns NULL if it does not exist
 		Entity* Find(string name);
+
+		// Checks itself and its contents for visible entities
+		// returns a list of all visible entities found
 		list<string> Visible();
 
+		// Add entity to the contains list
+		void Add(Entity* entity);
+
+		// Action default methods
 		virtual void Look(void);
 		virtual void Go(void);
 		virtual void Open(void);
@@ -31,11 +41,18 @@ class Entity
 		virtual void Use(Entity* recipient);
 		virtual void UsedOn(void) {};
 
-		virtual void SeeContents(void);
+		// Visible 'Objects' will reveal themselves when you
+		// look at their parent entity
+		virtual void SeeContents(void) {};
 
 	protected:
+		// name of the entity
 		string name;
+
+		// text displayed when the entity is looked at
 		string descritption;
+
+		// list of entities contained within this entity
 		list<Entity*> contains;
 };
 

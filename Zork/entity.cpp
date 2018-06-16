@@ -1,6 +1,7 @@
 #include <iostream>
 #include "entity.h"
 
+// Constructor
 Entity::Entity(std::string name, std::string description)
 {
 	this->name = name;
@@ -10,6 +11,7 @@ Entity::Entity(std::string name, std::string description)
 }
 
 
+// Destructor
 Entity::~Entity()
 {
 	for (list<Entity*>::const_iterator it = contains.begin(); it != contains.cend(); ++it)
@@ -17,12 +19,17 @@ Entity::~Entity()
 }
 
 
+// Adds a valid entity to the contains list
+// #entity: a valid entity
 void Entity::Add(Entity* entity)
 {
 	this->contains.push_back(entity);
 }
 
 
+// Looks for an entity with name 'name' within itself
+// #name: the name of the entity we are looking for
+// @returns: the entity if found, else NULL
 Entity* Entity::Find(string name) 
 {
 	if (this->name == name) return this;
@@ -39,6 +46,8 @@ Entity* Entity::Find(string name)
 }
 
 
+// Fetch a list of all visible entities within itself
+// @returns: list of visible entities
 list<string> Entity::Visible() 
 {
 	if (!this->visible) return {};
@@ -52,6 +61,9 @@ list<string> Entity::Visible()
 }
 
 
+// Look action
+// Displays the entities description and the placement text
+// of all visible object contained inside it
 void Entity::Look(void) 
 {
 	if (!this->visible) return;
@@ -62,6 +74,9 @@ void Entity::Look(void)
 		(*it)->SeeContents();
 }
 
+
+// ======== ACTION PLACEHOLDER ====== 
+// default behaviour if child class doesn't allow an action
 void Entity::Go(void) 
 {
 	cout << "You can not go there." << endl << "  ";
@@ -100,11 +115,4 @@ void Entity::Use(void)
 void Entity::Use(Entity* recipient)
 {
 	cout << "That is simply not possible." << endl << "  ";
-}
-
-void Entity::SeeContents(void) 
-{
-	//if (!this->visible) return;
-
-	//cout << this->placementText << endl << "  ";
 }
