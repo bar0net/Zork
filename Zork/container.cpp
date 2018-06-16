@@ -28,6 +28,15 @@ Container::Container(string name, string lockedText, bool isLocked, string openT
 Container::~Container() {}
 
 
+//Action: Look
+void Container::Look(void)
+{
+	Entity::Look();
+
+	if (contains.size() == 0)
+		cout << "It's empty." << endl << "  ";
+}
+
 // ACTION: Open
 void Container::Open(void)
 {

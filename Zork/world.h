@@ -20,12 +20,16 @@ class World
 		// Return the list of visible entities in the current zone
 		list<string> Visible() { return current->Visible(); };
 
+
 	private:
 		// list of zones in this world
 		list<Entity*> zones;
 
 		// zone where the player is standing
 		Entity* current;
+
+		// player description and inventory
+		Entity* player;
 };
 
 #endif // !_ZORK_WORLD_

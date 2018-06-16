@@ -22,6 +22,8 @@ Controller::Controller()
 
 	translate["drop"] = drop;
 
+	translate["inventory"] = inventory;
+
 	for (map<string, Actions>::iterator it = translate.begin(); it != translate.cend(); ++it)
 		this->commands.push_back(it->first);
 }

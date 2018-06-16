@@ -5,7 +5,7 @@
 #include <string>
 
 // List of allowed actions
-enum Actions { none, look, go, open, close, use, take, drop};
+enum Actions { none, look, go, open, close, use, take, drop, inventory};
 
 // Format for parsed input
 struct ParsedInput 

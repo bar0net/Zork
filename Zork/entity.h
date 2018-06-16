@@ -11,6 +11,9 @@ using namespace std;
 class Entity 
 {
 	public:
+		// name of the entity
+		string name;
+
 		// player can only see visible entities when looking
 		bool visible;
 
@@ -27,15 +30,19 @@ class Entity
 		// returns a list of all visible entities found
 		list<string> Visible();
 
-		// Add entity to the contains list
+		// Add/Remove entity to the contains list
 		void Add(Entity* entity);
+		void Remove(Entity* entity);
+
+		// Returns an inline-list of its contents
+		string ListContents(void);
 
 		// Action default methods
 		virtual void Look(void);
 		virtual void Go(void);
 		virtual void Open(void);
 		virtual void Close(void);
-		virtual void Take(void);
+		virtual void Take(Entity* parent);
 		virtual void Drop(void);
 		virtual void Use();
 		virtual void Use(Entity* recipient);
@@ -46,8 +53,6 @@ class Entity
 		virtual void SeeContents(void) {};
 
 	protected:
-		// name of the entity
-		string name;
 
 		// text displayed when the entity is looked at
 		string descritption;

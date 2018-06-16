@@ -4,15 +4,18 @@
 
 #include "object.h"
 #include "container.h"
+#include "item.h"
 
 World::World(void) 
 {
-	Entity* lake = new Entity("lake", "You find yourself in a beautiful lake.");
-	Container* lake_box = new Container("box", "The box seems to be locked.", true, "You can see the contents of the box.", "The box is closed.", false, "There is a small box on the floor.", true, lake);
-	Object* letter = new Object("letter", "Thank you for playing the game! \n  - Jordi Tudela", "There is a letter.", false, lake_box);
+	this->player = new Entity("player", "I look wonderful in cargo shorts and a kaki shirt.");
 
-	this->zones.push_back(lake);
-	this->current = lake;
+	Entity* desert = new Entity("desert", "You find yourself in front of the entrance of an ancent tomb surrounded by miles of desert.");
+	Container* bag = new Container("bag", "", false, "You can see the contents of your bag.", "It's your standard adventure bag with an obscene amount of zips. It's closed.", false, "Your bag lies on the floor. It's too heavy to pick up, though...", true, desert);
+	Item* flashlight = new Item("flashlight", "Your standard issued flashlight for adventurers, except the light bulb is busted.", "There is a barely functional flashlight.", true, true, bag);
+	
+	this->zones.push_back(desert);
+	this->current = desert;
 
 	this->current->Look();
 }
@@ -30,6 +33,19 @@ void World::Update(ParsedInput msg)
 		cout << "I don't understand what you want to do..." << endl << "  ";
 		return;
 	}
+
+	// special actions without target
+	if (msg.action == inventory)
+	{
+		string text = this->player->ListContents();
+
+		if (text == "")
+			cout << "My inventory is empty." << endl << "  ";
+		else
+			cout << "I am currently carrying: " << text.substr(0,text.size()-2) << "." << endl << "  ";
+		return;
+	}
+
 
 	if (msg.target == "")
 	{
@@ -67,7 +83,7 @@ void World::Update(ParsedInput msg)
 		break;
 
 	case take:
-		target->Take();
+		target->Take(this->player);
 		break;
 
 	case drop:

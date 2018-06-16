@@ -27,6 +27,25 @@ void Entity::Add(Entity* entity)
 }
 
 
+// Removes a valid entity to the contains list
+// #entity: a valid entity
+void Entity::Remove(Entity* entity)
+{
+	this->contains.remove(entity);
+}
+
+
+string Entity::ListContents(void) 
+{
+	string output = "";
+
+	for (list<Entity*>::const_iterator it = contains.begin(); it != contains.cend(); ++it)
+		output += (*it)->name + ", ";
+
+	return output;
+}
+
+
 // Looks for an entity with name 'name' within itself
 // #name: the name of the entity we are looking for
 // @returns: the entity if found, else NULL
@@ -95,7 +114,7 @@ void Entity::Close(void)
 }
 
 
-void Entity::Take(void) 
+void Entity::Take(Entity* parent)
 {
 	cout << "You can't carry this." << endl << "  ";
 }
@@ -111,6 +130,7 @@ void Entity::Use(void)
 {
 	cout << "That is simply not possible." << endl << "  ";
 }
+
 
 void Entity::Use(Entity* recipient)
 {

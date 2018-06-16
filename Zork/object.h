@@ -1,6 +1,6 @@
 #pragma once
-#ifndef _ZORK_ITEM_
-#define _ZORK_ITEM_
+#ifndef _ZORK_OBJECT_
+#define _ZORK_OBJECT_
 
 #include "entity.h"
 
@@ -20,4 +20,4 @@ class Object : public Entity
 		string placementText = "";
 };
 
-#endif // !_ZORK_ITEM_
+#endif // !_ZORK_OBJECT_

@@ -12,6 +12,7 @@ class Container : public Object
 		~Container();
 
 		// Container's Actions
+		void Look(void);
 		void Open(void);
 		void Close(void);
 		void UsedOn(void);
