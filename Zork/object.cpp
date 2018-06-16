@@ -1,8 +1,8 @@
-#include "item.h"
+#include "object.h"
 
 #include <iostream>
 
-Item::Item(string name, string description, string placementText, bool visible, Entity* parent) :
+Object::Object(string name, string description, string placementText, bool visible, Entity* parent) :
 Entity(name, description)
 {
 	this->placementText = placementText;
@@ -11,9 +11,9 @@ Entity(name, description)
 	parent->Add(this);
 }
 
-Item::~Item() {}
+Object::~Object() {}
 
-void Item::SeeContents(void)
+void Object::SeeContents(void)
 {
 	if (!this->visible) return;
 

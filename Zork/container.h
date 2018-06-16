@@ -2,9 +2,9 @@
 #ifndef _ZORK_ITEM_CONTAINER_
 #define _ZORK_ITEM_CONTAINER_
 
-#include "item.h"
+#include "object.h"
 
-class Container : public Item 
+class Container : public Object
 {
 	public:
 		Container(string name, string lockedText, bool isLocked, string openText, string closedText, bool isOpen, string placementText, bool visible, Entity* parent);

@@ -3,7 +3,7 @@
 #include <iostream>
 
 Container::Container(string name, string lockedText, bool isLocked, string openText, string closedText, bool isOpen, string placementText, bool visible, Entity* parent) :
-	Item(name, lockedText, placementText, visible, parent)
+	Object(name, lockedText, placementText, visible, parent)
 {
 	this->isOpen = isOpen;
 	this->isLocked = isLocked;

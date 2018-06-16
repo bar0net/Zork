@@ -4,11 +4,11 @@
 
 #include "entity.h"
 
-class Item : public Entity
+class Object : public Entity
 {
 	public:
-		Item(string name, string description, string placementText, bool visible, Entity* parent);
-		~Item();
+		Object(string name, string description, string placementText, bool visible, Entity* parent);
+		~Object();
 
 		void SeeContents(void);
 
