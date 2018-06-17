@@ -39,5 +39,6 @@ void Exit::UsedOn(void)
 
 void Exit::SeeContents(void) 
 {
-	cout << this->placementText << endl << "  ";
+	if (this->placementText != "")
+		cout << this->placementText << endl << "  ";
 }

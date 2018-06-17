@@ -46,7 +46,7 @@ World::World(void)
 	Exit* rubble_west = new Exit("west", "You can see a glimpse of the entrance hall through the door.", 
 		"Through the darkness, you can sense the rusted door to the west.", rubble, entrance);
 	Exit* rubble_door = new Exit("door", "You can see a glimpse of the entrance hall through the door.",
-		"Through the darkness, you can sense the rusted door to the west.", rubble, entrance);
+		"", rubble, entrance);
 
 	Exit* mural_south = new Exit("south", "You can see a long hallway with pictograms on the walls and long extinguished torches.",
 		"On the southern part of the room, you can see a long hallway", mural, entrance);
@@ -63,17 +63,25 @@ World::World(void)
 
 	Item* battery = new Item("battery", "This is the battery of your flashlight. It's still charged.", "There is a battery.", false, true, true, true, flashlight);
 	
+	Item* sand = new Item("sand", "There's sand for as long as the eye can see. The dunes shift slightly with every gust \n  "
+		"of wind and it and you can't avoid thinking about the many wonders that may lay buried under them.",
+		"The tomb is surrounded by an unhospitable desert with sand shining defiant under the blazing sun.", true, false, false, false, desert);
 
 	// Mural Contents
 	Item* cables = new Item("cables", "A handful of copper cables.", "There are some copper cables.", true, true, true, true, mural);
 	Item* rod = new Item("rod", "A metal rod.", "There's a rod.", true, true, true, true, cables, mural);
 	cables->allowedInteractors.push_back(rod);
 
+	// Rubble Room Contents
+	Item* red_orb = new Item("red orb", "It appears to a ceramic material with a crystaline structure but it glows in the dark and you can't fathom why.", "You can see a glowing red orb.", true, true, true, true, rubble);
+
 	// Item Combinations
 	Item* coil = new Item("coil", "A magnetic coil without a battery.", "There is a coil.", true, true, true, true, battery, NULL);
 	battery->allowedInteractors.push_back(coil);
 
-	Item* magnet = new Item("magnet", "You have a magnet.", "There is a magnet.", true, true, true, true, NULL);
+	Item* magnet = new Item("magnet", "You have a magnet.", "There is a magnet.", true, true, true, true, sand, NULL);
+	sand->allowedInteractors.push_back(magnet);
+
 	Item* rusted_key = new Item("key", "A rusted key.", "There is a rusted key", true, true, true, false, entrance_east, NULL);
 	
 	combinations[new Combination("cables", "rod")] = coil;
