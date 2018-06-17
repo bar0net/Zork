@@ -7,7 +7,7 @@
 // List of allowed actions
 enum Actions { NONE, LOOK, GO, OPEN, CLOSE, USE, TAKE, DROP, INVENTORY, HELP};
 
-enum EntityTypes {ENTITY, ITEM, CONTAINER, ROOM, EXIT};
+enum EntityTypes {ENTITY, ITEM, CONTAINER, ROOM, EXIT, CHARACTER};
 
 // Format for parsed input
 struct ParsedInput 

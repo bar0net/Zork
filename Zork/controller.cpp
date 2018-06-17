@@ -6,6 +6,7 @@ Controller::Controller()
 	// associate key words with allowed action
 	translate["look"] = LOOK;
 	translate["read"] = LOOK;
+	translate["glance"] = LOOK;
 
 	translate["go"] = GO;
 	translate["walk"] = GO;
@@ -17,12 +18,15 @@ Controller::Controller()
 	translate["close"] = CLOSE;
 
 	translate["use"] = USE;
+	translate["employ"] = USE;
 
 	translate["take"] = TAKE;
 	translate["grab"] = TAKE;
 	translate["pick"] = TAKE;
 
 	translate["drop"] = DROP;
+	translate["put"] = DROP;
+	translate["leave"] = DROP;
 
 	translate["inventory"] = INVENTORY;
 

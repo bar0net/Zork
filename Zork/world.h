@@ -8,6 +8,7 @@
 #include "globals.h"
 #include "entity.h"
 #include "combinations.h"
+#include "character.h"
 
 class World
 {
@@ -15,6 +16,9 @@ class World
 		// Constructor & Destructor
 		World();
 		~World();
+
+		// player description and inventory
+		Character* player;
 
 		// Things to do every frame
 		void Update(ParsedInput msg);
@@ -29,9 +33,6 @@ class World
 
 		// zone where the player is standing
 		Entity* current;
-
-		// player description and inventory
-		Entity* player;
 
 		// List of Item Combinations
 		// All combinations must be linked to an ITEM

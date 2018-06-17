@@ -60,7 +60,7 @@ int main(void)
 
 		input = ReadInput();
 
-		if (input == "exit") break;
+		if (input == "exit" || !world->player->Alive()) break;
 
 		ParsedInput msg = controller.Parse(input, world->Visible());
 		world->Update(msg);

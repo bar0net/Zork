@@ -10,7 +10,7 @@
 
 World::World(void) 
 {
-	this->player = new Entity("player", "I look wonderful in cargo shorts and a kaki shirt.");
+	this->player = new Character("player", "I look wonderful in cargo shorts and a kaki shirt.");
 
 	// Zones
 	Room* desert = new Room("desert", "You find yourself in front of the entrance of an ancent tomb surrounded by miles of desert.");
@@ -27,8 +27,10 @@ World::World(void)
 		"This room has clearly been closed for centuries and the dust has settled. Even though there\n  "
 		"is little light in this stance, you can distinguish some rubble on the floor as some walls\n  "
 		"has clearly collapsed.");
-	Room* chamber = new Room("chamber", "");
-	Room* workshop = new Room("workshop", "");
+	Room* chamber = new Room("chamber", "You find yourself in a dark chamber.");
+	Room* workshop = new Room("workshop", "This appears to be a small room used by the artisans who worked on the tomb.\n  "
+		"You can see the rests of some old broken tools, they don't work\n  "
+		"anymore but they would make a hell of an exhibition in a museum.");
 
 	this->zones.push_back(desert);
 	this->zones.push_back(entrance);
