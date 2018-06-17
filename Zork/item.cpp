@@ -3,28 +3,33 @@
 #include <iostream>
 
 // Constructors
-Item::Item(string name, string description, string placementText, bool visible, bool canPick, Entity* parent) :
+Item::Item(string name, string description, string placementText, bool visible, bool canPick, bool destroyOnUse, Entity* parent) :
 	Object(name, description, placementText, visible, parent)
 {
 	this->canPick = canPick;
 	this->canDrop = false;
 	this->parent = parent;
 	this->type = ITEM;
+	this->destroyOnUse = destroyOnUse;
 }
 
-Item::Item(string name, string description, string placementText, bool visible, bool canPick,  Entity* allowedInteractor, Entity* parent) :
-	Item(name,description,placementText,visible,canPick,parent)
+Item::Item(string name, string description, string placementText, bool visible, bool canPick, bool destroyOnUse, Entity* allowedInteractor, Entity* parent) :
+	Item(name, description, placementText, visible, canPick, destroyOnUse, parent)
 {
 	this->allowedInteractors.push_back(allowedInteractor);
 }
 
-Item::Item(string name, string description, string placementText, bool visible, bool canPick, list<Entity*> allowedInteractors, Entity* parent) :
-	Item(name, description, placementText, visible, canPick, parent)
+Item::Item(string name, string description, string placementText, bool visible, bool canPick, bool destroyOnUse, list<Entity*> allowedInteractors, Entity* parent) :
+	Item(name, description, placementText, visible, canPick, destroyOnUse, parent)
 {
 	this->allowedInteractors = allowedInteractors;
 }
 
-Item::~Item() {}
+Item::~Item() 
+{
+	cout << "The " << this->name << " got destroyed." << endl << "  ";
+	this->parent->Remove(this);
+}
 
 
 void Item::Take(Entity* player)
@@ -85,6 +90,12 @@ void Item::DropAction(Entity* parent)
 // Use the item on the target
 void Item::Use(Entity* target) 
 {
+	if (this->allowedInteractors.size() == 0) 
+	{
+		cout << "You can't use this." << endl << "  ";
+		return;
+	}
+
 	bool found = false;
 	for (list<Entity*>::iterator it = this->allowedInteractors.begin(); it != this->allowedInteractors.cend(); ++it)
 	{
@@ -100,4 +111,6 @@ void Item::Use(Entity* target)
 
 	cout << "You used " << this->name << " on " << target->name << " and it worked." << endl << "  ";
 	target->UsedOn();
+
+	if (destroyOnUse) delete this;
 } 

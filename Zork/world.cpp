@@ -57,9 +57,9 @@ World::World(void)
 		"Your bag lies on the floor. It's too heavy to pick up, though...", true, desert);
 	
 	Item* flashlight = new Item("flashlight", "Your standard issued flashlight for adventurers, except the light bulb is busted.", 
-		"There is a barely functional flashlight.", false, true, bag);
+		"There is a barely functional flashlight.", false, true, false, bag);
 	
-	Item* rusted_key = new Item("key", "A rusted key.", "There is a rusted key", true, true, entrance_east, desert);
+	Item* rusted_key = new Item("key", "A rusted key.", "There is a rusted key", true, true, true, entrance_east, desert);
 
 	this->current = desert;
 	this->current->Look();

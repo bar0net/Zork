@@ -13,9 +13,9 @@ class Item : public Object
 		Entity* parent;
 
 		// Constructor & Destructor
-		Item(string name, string description, string placementText, bool visible, bool canPick, Entity* parent);
-		Item(string name, string description, string placementText, bool visible, bool canPick, Entity* allowedInteractor, Entity* parent);
-		Item(string name, string description, string placementText, bool visible, bool canPick, list<Entity*> allowedInteractors, Entity* parent);
+		Item(string name, string description, string placementText, bool visible, bool canPick, bool destroyOnUse, Entity* parent);
+		Item(string name, string description, string placementText, bool visible, bool canPick, bool destroyOnUse, Entity* allowedInteractor, Entity* parent);
+		Item(string name, string description, string placementText, bool visible, bool canPick, bool destroyOnUse, list<Entity*> allowedInteractors, Entity* parent);
 		~Item();
 		
 		// Actions
@@ -27,6 +27,7 @@ class Item : public Object
 		bool canPick;
 		bool canDrop;
 		bool canUse;
+		bool destroyOnUse;
 
 		list<Entity*> allowedInteractors;
 		void Drop(Room* parent);
