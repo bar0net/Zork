@@ -13,6 +13,7 @@ struct ParsedInput
 	public: 
 		Actions action = none;
 		std::string target = "";
+		std::string interactor = "";
 };
 
 

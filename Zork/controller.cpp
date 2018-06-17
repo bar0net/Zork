@@ -19,6 +19,7 @@ Controller::Controller()
 
 	translate["take"] = take;
 	translate["grab"] = take;
+	translate["pick"] = take;
 
 	translate["drop"] = drop;
 
@@ -57,15 +58,36 @@ ParsedInput Controller::Parse(string input, list<string> targets)
 	
 
 	// Find the target
-	// TODO: check if more than one target is found
+	// TODO: Create a new action for when you input too many targets (?)
+	// TODO: Check actions that want 1 and actions that want 2 targets.
+	int index = string::npos;
 	for (list<string>::iterator it = targets.begin(); it != targets.cend(); ++it) 
 	{
 		size_t found = input.find((*it));
 
-		if (found != string::npos) 
+		if (found != string::npos)
 		{
-			output.target = (*it);
-			break;
+			if (output.target == "")
+			{
+				output.target = (*it);
+				index = found;
+			}
+			else if (output.target != "" && output.interactor != "")
+			{
+				output.action = none;
+				return output;
+			}
+			else if (output.target != ""  && found <= index)
+			{
+				output.interactor = output.target;
+				output.target = (*it);
+				index = -1;
+			}
+			else if (output.target != "" && found > index)
+			{
+				output.interactor = (*it);
+				index = -1;
+			}
 		}
 	}
 	return output;

@@ -44,7 +44,7 @@ class Entity
 		virtual void Close(void);
 		virtual void Take(Entity* parent);
 		virtual void Drop(void);
-		virtual void Use();
+		virtual void Use(void);
 		virtual void Use(Entity* recipient);
 		virtual void UsedOn(void) {};
 

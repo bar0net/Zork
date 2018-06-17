@@ -54,5 +54,19 @@ void Item::Drop(Entity* parent)
 
 void Item::Use(Entity* target) 
 {
+	bool found = false;
+	for (list<Entity*>::iterator it = this->allowedInteractors.begin(); it != this->allowedInteractors.cend(); ++it)
+	{
+		if (*it == target)
+		{
+			found = true;
+			break;
+		}
+	}
 
-}
+	if (!found)
+		cout << "You can't do this." << endl << "  ";
+
+	cout << "You used " << this->name << " on " << target->name << " and it worked." << endl << "  ";
+	target->UsedOn();
+} 

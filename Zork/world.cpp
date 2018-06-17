@@ -37,12 +37,14 @@ World::World(void)
 	Exit* desert_north = new Exit("north", "Two massive stone columns welcome you to the temple.", "The entrance to the temple lies to the north.", desert, entrance);
 
 	Exit* entrance_south = new Exit("south", "Two massive stone columns preside the exit of the temple.", "The gates to the desert lie to the south.", entrance, desert);
-	Exit* entrance_east = new Exit("east", "The door has rusted and the decorations have deteriorated.\n  Time has clearly takem its toll on this door.",
-		"You can see a rusted door to the east.", true, entrance, rubble);
+	Exit* entrance_east = new Exit("door", "The door has rusted and the decorations have deteriorated.\n  Time has clearly takem its toll on this door.",
+		"There is a rusted door at one side of the room.", true, entrance, rubble);
 	Exit* entrance_north = new Exit("north", "You can see a long hallway with pictograms on the walls and long extinguished torches.", "On the northern part of"
 		"of the room, you can see a long hallway", entrance, mural);
 
 	Exit* rubble_west = new Exit("west", "You can see a glimpse of the entrance hall through the door.", 
+		"Through the darkness, you can sense the rusted door to the west.", rubble, entrance);
+	Exit* rubble_door = new Exit("door", "You can see a glimpse of the entrance hall through the door.",
 		"Through the darkness, you can sense the rusted door to the west.", rubble, entrance);
 
 	Exit* mural_south = new Exit("south", "You can see a long hallway with pictograms on the walls and long extinguished torches.",
@@ -54,10 +56,9 @@ World::World(void)
 		"Your bag lies on the floor. It's too heavy to pick up, though...", true, desert);
 	
 	Item* flashlight = new Item("flashlight", "Your standard issued flashlight for adventurers, except the light bulb is busted.", 
-		"There is a barely functional flashlight.", true, true, bag);
+		"There is a barely functional flashlight.", false, true, bag);
 	
-
-
+	Item* rusted_key = new Item("key", "A rusted key.", "A rusted key", true, true, entrance_east, desert);
 
 	this->current = desert;
 	this->current->Look();
@@ -97,11 +98,16 @@ void World::Update(ParsedInput msg)
 	}
 
 	Entity* target = current->Find(msg.target);
+	if (target == NULL) target = player->Find(msg.target);
+
 	if (target == NULL) 
 	{
 		cout << "[World::Update] Could not find the target <<" << msg.target << ">> for this action.";
+		return;
 	}
 
+	Entity* interactor = current->Find(msg.interactor);
+	if (interactor == NULL) player->Find(msg.interactor);
 
 	switch (msg.action)
 	{
@@ -122,7 +128,11 @@ void World::Update(ParsedInput msg)
 		break;
 
 	case use:
-		target->Use();
+		if (interactor == NULL)
+			target->Use();
+		else
+			target->Use(interactor);
+		
 		break;
 
 	case take:
@@ -147,4 +157,14 @@ void World::CurrentPosition(Entity* room)
 	this->current = room;
 
 	this->current->Look();
+}
+
+list<string> World::Visible(void)
+{
+	list<string> world = current->Visible();
+	list<string> invent = player->Visible();
+	
+	world.merge(invent);
+
+	return world;
 }

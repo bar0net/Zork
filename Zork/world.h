@@ -18,7 +18,7 @@ class World
 		void Update(ParsedInput msg);
 
 		// Return the list of visible entities in the current zone
-		list<string> Visible() { return current->Visible(); };
+		list<string> Visible();
 
 
 	private:
