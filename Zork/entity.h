@@ -39,7 +39,7 @@ class Entity
 
 		// Action default methods
 		virtual void Look(void);
-		virtual void Go(void);
+		virtual Entity* Go(void);
 		virtual void Open(void);
 		virtual void Close(void);
 		virtual void Take(Entity* parent);

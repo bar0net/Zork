@@ -96,9 +96,11 @@ void Entity::Look(void)
 
 // ======== ACTION PLACEHOLDER ====== 
 // default behaviour if child class doesn't allow an action
-void Entity::Go(void) 
+Entity* Entity::Go(void)
 {
 	cout << "You can not go there." << endl << "  ";
+	
+	return NULL;
 }
 
 

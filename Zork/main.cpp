@@ -12,8 +12,15 @@ using namespace std;
 void Start(void)
 {
 	// Greet the player
-	cout << "    Welcome to myZork!    " << endl;
-	cout << "  ======================  " << endl << endl;
+	cout << "                      Welcome to myZork!                 " << endl;
+	cout << "  ====================================================== " << endl << endl;
+	cout << "  After countless hours of driving through the dessert," << endl;
+	cout << "  your 'not at all suspicious looking' driver drops you" << endl;
+	cout << "  at the gates of the lost tomb of the last king of Anaria." << endl;
+	cout << "  You have been looking for this place and the secrets it" << endl;
+	cout << "  stores for all your live." << endl;
+	cout << "  It seems you are not the first to lay foot on this place," << endl;
+	cout << "  but you can't see any signs of recent activity. How odd..." << endl << endl;
 	cout << "  ";
 }
 

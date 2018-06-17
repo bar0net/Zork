@@ -30,6 +30,9 @@ class World
 
 		// player description and inventory
 		Entity* player;
+
+		// Updates current player position
+		void CurrentPosition(Entity* room);
 };
 
 #endif // !_ZORK_WORLD_
