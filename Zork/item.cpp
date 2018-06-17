@@ -35,11 +35,18 @@ Item::~Item() {}
 
 void Item::Take(Entity* player)
 {
-	if (!canPick) return;
+	if (!canPick) 
+	{
+		cout << "You can't do that." << endl << "  ";
+		return;
+	}
 
 	this->parent->Remove(this);
 
 	cout << "I grab the " << this->name << " and store it in my inventory." << endl << "  ";
+
+	canPick = false;
+	canDrop = true;
 
 	this->parent = player;
 	parent->Add(this);
@@ -48,7 +55,21 @@ void Item::Take(Entity* player)
 
 void Item::Drop(Entity* parent) 
 {
+	if (!canDrop) 
+	{
+		cout << "You can't do that." << endl << "  ";
+		return;
+	}
 
+	this->parent->Remove(this);
+
+	cout << "You dropped the " << this->name << " on the " << parent->name << endl << "  ";
+
+	canPick = true;
+	canDrop = false;
+
+	this->parent = parent;
+	parent->Add(this);
 }
 
 

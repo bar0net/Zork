@@ -58,7 +58,7 @@ World::World(void)
 	Item* flashlight = new Item("flashlight", "Your standard issued flashlight for adventurers, except the light bulb is busted.", 
 		"There is a barely functional flashlight.", false, true, bag);
 	
-	Item* rusted_key = new Item("key", "A rusted key.", "A rusted key", true, true, entrance_east, desert);
+	Item* rusted_key = new Item("key", "A rusted key.", "There is a rusted key", true, true, entrance_east, desert);
 
 	this->current = desert;
 	this->current->Look();
@@ -140,7 +140,10 @@ void World::Update(ParsedInput msg)
 		break;
 
 	case drop:
-		target->Drop();
+		if (interactor == NULL)
+			target->Drop(this->current);
+		else
+			target->Drop(interactor);
 		break;
 
 	default:

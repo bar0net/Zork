@@ -43,7 +43,7 @@ class Entity
 		virtual void Open(void);
 		virtual void Close(void);
 		virtual void Take(Entity* parent);
-		virtual void Drop(void);
+		virtual void Drop(Entity* parent);
 		virtual void Use(void);
 		virtual void Use(Entity* recipient);
 		virtual void UsedOn(void) {};

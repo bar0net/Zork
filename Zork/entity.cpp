@@ -122,7 +122,7 @@ void Entity::Take(Entity* parent)
 }
 
 
-void Entity::Drop(void) 
+void Entity::Drop(Entity* parent) 
 {
 	cout << "You are not carrying that." << endl << "  ";
 }
