@@ -9,18 +9,15 @@ Exit::Exit(string name, string description, string placement, Entity* parent, En
 	this->destination = destination;
 	this->locked = false;
 	this->placementText = placement;
+	this->type = EXIT;
 
 	parent->Add(this);
 }
 
 Exit::Exit(string name, string description, string placement, bool locked, Entity* parent, Entity* destination) :
-	Entity(name, description)
+	Exit(name, description, placement, parent, destination)
 {
-	this->destination = destination;
 	this->locked = locked;
-	this->placementText = placement;
-
-	parent->Add(this);
 }
 
 // Destructor

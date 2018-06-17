@@ -8,6 +8,7 @@ Container::Container(string name, string lockedText, bool isLocked, string openT
 {
 	this->isOpen = isOpen;
 	this->isLocked = isLocked;
+	this->type = CONTAINER;
 
 	if (isOpen)
 	{

@@ -16,5 +16,7 @@ struct ParsedInput
 		std::string interactor = "";
 };
 
+enum EntityTypes {ENTITY, ITEM, CONTAINER, ROOM, EXIT};
+
 
 #endif // !_ZORK_GLOBALS_

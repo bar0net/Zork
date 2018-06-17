@@ -5,6 +5,8 @@
 #include <string>;
 #include <list>;
 
+#include "globals.h"
+
 using namespace std;
 
 // Anything that is physically present in the game world
@@ -16,6 +18,9 @@ class Entity
 
 		// player can only see visible entities when looking
 		bool visible;
+
+		// the type of entity
+		EntityTypes type = ENTITY;
 
 		// Constructor & Destructor
 		Entity(std::string name, std::string description);

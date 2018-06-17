@@ -6,23 +6,24 @@
 #include "container.h"
 #include "item.h"
 #include "exit.h"
+#include "room.h"
 
 World::World(void) 
 {
 	this->player = new Entity("player", "I look wonderful in cargo shorts and a kaki shirt.");
 
 	// Zones
-	Entity* desert = new Entity("desert", "You find yourself in front of the entrance of an ancent tomb surrounded by miles of desert.");
-	Entity* entrance = new Entity("entrance", 
+	Room* desert = new Room("desert", "You find yourself in front of the entrance of an ancent tomb surrounded by miles of desert.");
+	Room* entrance = new Room("entrance",
 		"The entrance hall is deemly lit. Looking at the vivid pictograms\n  that decorate this stance," 
 		" it becomes clear that the last king of\n  Anatria was powerful and beloved by his subjects.");
-	Entity* mural = new Entity("mural",
+	Room* mural = new Room("mural",
 		"There is a huge mural presiding the stance. The scene depicts the funeral of the king.\n  "
 		"You can see some priests embalming the late king's body while servants store bast amounts\n  "
 		"of richess with the sarcophagus.\n  "
 		"On closer inspection, you can see some human remains at the corner of the room. They were\n  "
 		"the paintors who got trapped in the tomb. No trace of the riches, though...");
-	Entity* rubble = new Entity("rubble",
+	Room* rubble = new Room("rubble",
 		"This room has clearly been closed for centuries and the dust has settled. Even though there\n  "
 		"is little light in this stance, you can distinguish some rubble on the floor as some walls\n  "
 		"has clearly collapsed.");

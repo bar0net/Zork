@@ -4,6 +4,9 @@
 
 #include "object.h"
 
+#include "room.h"
+#include "container.h"
+
 class Item : public Object
 {
 	public:
@@ -17,8 +20,8 @@ class Item : public Object
 		
 		// Actions
 		void Take(Entity* parent);
-		void Drop(Entity* parent);
 		void Use(Entity* target);
+		void Drop(Entity* parent);
 
 	private:
 		bool canPick;
@@ -26,6 +29,9 @@ class Item : public Object
 		bool canUse;
 
 		list<Entity*> allowedInteractors;
+		void Drop(Room* parent);
+		void Drop(Container* parent);
+		void DropAction(Entity* parent);
 };
 
 #endif // !_ZORK_ITEM_

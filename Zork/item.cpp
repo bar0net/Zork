@@ -8,26 +8,20 @@ Item::Item(string name, string description, string placementText, bool visible, 
 {
 	this->canPick = canPick;
 	this->canDrop = false;
-	this->allowedInteractors = {};
 	this->parent = parent;
+	this->type = ITEM;
 }
 
 Item::Item(string name, string description, string placementText, bool visible, bool canPick,  Entity* allowedInteractor, Entity* parent) :
-	Object(name, description, placementText, visible, parent)
+	Item(name,description,placementText,visible,canPick,parent)
 {
-	this->canPick = canPick;
-	this->canDrop = false;
 	this->allowedInteractors.push_back(allowedInteractor);
-	this->parent = parent;
 }
 
 Item::Item(string name, string description, string placementText, bool visible, bool canPick, list<Entity*> allowedInteractors, Entity* parent) :
-	Object(name, description, placementText, visible, parent)
+	Item(name, description, placementText, visible, canPick, parent)
 {
-	this->canPick = canPick;
-	this->canDrop = false;
 	this->allowedInteractors = allowedInteractors;
-	this->parent = parent;
 }
 
 Item::~Item() {}
@@ -52,7 +46,7 @@ void Item::Take(Entity* player)
 	parent->Add(this);
 }
 
-
+// Drops the item if the recipient 'parent' is valid
 void Item::Drop(Entity* parent) 
 {
 	if (!canDrop) 
@@ -61,9 +55,25 @@ void Item::Drop(Entity* parent)
 		return;
 	}
 
-	this->parent->Remove(this);
+	if (parent->type == ROOM) 
+	{
+		DropAction(parent);
+		cout << "You dropped the " << this->name << " on the floor." << endl << "  ";
+	}
+	else if (parent->type == CONTAINER)
+	{
+		DropAction(parent);
+		cout << "You dropped the " << this->name << " in the " << parent->name << endl << "  ";
+	}
+	else
+		cout << "You can't do that." << endl << "  ";
+}
 
-	cout << "You dropped the " << this->name << " on the " << parent->name << endl << "  ";
+
+// Drops the item on the recipient 'parent'
+void Item::DropAction(Entity* parent) 
+{
+	this->parent->Remove(this);
 
 	canPick = true;
 	canDrop = false;
@@ -72,7 +82,7 @@ void Item::Drop(Entity* parent)
 	parent->Add(this);
 }
 
-
+// Use the item on the target
 void Item::Use(Entity* target) 
 {
 	bool found = false;
