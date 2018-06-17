@@ -10,18 +10,18 @@
 class Item : public Object
 {
 	public:
-		Entity* parent;
+		bool destroyOnUsedOn;
+		list<Entity*> allowedInteractors;
 
 		// Constructor & Destructor
-		Item(string name, string description, string placementText, bool visible, bool canPick, bool destroyOnUse, Entity* parent);
-		Item(string name, string description, string placementText, bool visible, bool canPick, bool destroyOnUse, Entity* allowedInteractor, Entity* parent);
-		Item(string name, string description, string placementText, bool visible, bool canPick, bool destroyOnUse, list<Entity*> allowedInteractors, Entity* parent);
+		Item(string name, string description, string placementText, bool visible, bool canPick, bool destroyOnUse, bool destroyOnUsedOn, Entity* parent);
+		Item(string name, string description, string placementText, bool visible, bool canPick, bool destroyOnUse, bool destroyOnUsedOn, Entity* allowedInteractor, Entity* parent);
+		Item(string name, string description, string placementText, bool visible, bool canPick, bool destroyOnUse, bool destroyOnUsedOn, list<Entity*> allowedInteractors, Entity* parent);
 		~Item();
 		
 		// Actions
-		void Take(Entity* parent);
-		void Use(Entity* target);
-		void Drop(Entity* parent);
+		void Use(Entity* target, map<Combination*, Entity*> combinations);
+		void UsedOn(void);
 
 	private:
 		bool canPick;
@@ -29,10 +29,8 @@ class Item : public Object
 		bool canUse;
 		bool destroyOnUse;
 
-		list<Entity*> allowedInteractors;
-		void Drop(Room* parent);
-		void Drop(Container* parent);
-		void DropAction(Entity* parent);
+		bool CanInteract(Entity* entity);
+		Entity* GetCombination(string name1, string name2, map<Combination*, Entity*> combinations);
 };
 
 #endif // !_ZORK_ITEM_

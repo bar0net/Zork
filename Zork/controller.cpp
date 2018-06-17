@@ -46,7 +46,7 @@ ParsedInput Controller::Parse(string input, list<string> targets)
 	// we asume the action is the first word of the input
 	for (list<string>::iterator it = commands.begin(); it != commands.cend(); ++it)
 	{
-		int length = (*it).size();
+		unsigned int length = (*it).size();
 		if (input.size() < length) continue;
 
 		if (input.substr(0, length) != (*it)) continue;
@@ -60,7 +60,8 @@ ParsedInput Controller::Parse(string input, list<string> targets)
 	// Find the target
 	// TODO: Create a new action for when you input too many targets (?)
 	// TODO: Check actions that want 1 and actions that want 2 targets.
-	int index = string::npos;
+
+	unsigned int index = string::npos;
 	for (list<string>::iterator it = targets.begin(); it != targets.cend(); ++it) 
 	{
 		size_t found = input.find((*it));

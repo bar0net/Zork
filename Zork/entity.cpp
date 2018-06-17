@@ -1,5 +1,6 @@
-#include <iostream>
 #include "entity.h"
+
+#include <iostream>
 
 // Constructor
 Entity::Entity(std::string name, std::string description)
@@ -54,7 +55,7 @@ Entity* Entity::Find(string name)
 	if (this->name == name) return this;
 
 	Entity* output;
-	for (list<Entity*>::const_iterator it = contains.begin(); it != contains.cend(); ++it)
+	for (list<Entity*>::const_iterator it = contains.begin(); it != contains.end(); ++it)
 	{
 		output = (*it)->Find(name);
 
@@ -128,13 +129,13 @@ void Entity::Drop(Entity* parent)
 }
 
 
-void Entity::Use(void)
+void Entity::Use(map<Combination*, Entity*> combinations)
 {
 	cout << "That is simply not possible." << endl << "  ";
 }
 
 
-void Entity::Use(Entity* recipient)
+void Entity::Use(Entity* target, map<Combination*, Entity*> combinations)
 {
-	cout << "That is simply not possible." << endl << "  ";
+	cout << "You cannot combine those items." << endl << "  ";
 }

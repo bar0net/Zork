@@ -8,7 +8,8 @@ class Container : public Object
 {
 	public:
 		// Constructor & Destructor
-		Container(string name, string lockedText, bool isLocked, string openText, string closedText, bool isOpen, string placementText, bool visible, Entity* parent);
+		Container(string name, string lockedText, bool isLocked, string openText, string closedText, 
+					bool isOpen, string placementText, bool canPick, bool visible, Entity* parent);
 		~Container();
 
 		// Container's Actions

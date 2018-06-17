@@ -7,6 +7,8 @@
 // List of allowed actions
 enum Actions { none, look, go, open, close, use, take, drop, inventory};
 
+enum EntityTypes {ENTITY, ITEM, CONTAINER, ROOM, EXIT};
+
 // Format for parsed input
 struct ParsedInput 
 {
@@ -15,8 +17,5 @@ struct ParsedInput
 		std::string target = "";
 		std::string interactor = "";
 };
-
-enum EntityTypes {ENTITY, ITEM, CONTAINER, ROOM, EXIT};
-
 
 #endif // !_ZORK_GLOBALS_

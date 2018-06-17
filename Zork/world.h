@@ -3,9 +3,11 @@
 #define _ZORK_WORLD_
 
 #include <list>
+#include <map>
 
-#include "entity.h"
 #include "globals.h"
+#include "entity.h"
+#include "combinations.h"
 
 class World
 {
@@ -30,6 +32,10 @@ class World
 
 		// player description and inventory
 		Entity* player;
+
+		// List of Item Combinations
+		// All combinations must be linked to an ITEM
+		map<Combination*, Entity*> combinations;
 
 		// Updates current player position
 		void CurrentPosition(Entity* room);

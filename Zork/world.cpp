@@ -54,12 +54,32 @@ World::World(void)
 	// Desert contents
 	Container* bag = new Container("bag", "", false, "You can see the contents of your bag.", 
 		"It's your standard adventure bag with an obscene amount of zips. It's closed.", false, 
-		"Your bag lies on the floor. It's too heavy to pick up, though...", true, desert);
+		"Your bag lies on the floor. It's too heavy to pick up, though...", false, true, desert);
 	
-	Item* flashlight = new Item("flashlight", "Your standard issued flashlight for adventurers, except the light bulb is busted.", 
-		"There is a barely functional flashlight.", false, true, false, bag);
+	Container* flashlight = new Container("flashlight", "" , false, 
+		"Your standard issued flashlight for adventurers. The battery compartment is open.",
+		"Your standard issued flashlight for adventurers, except the light bulb is busted.", false,
+		"There is a barely functional flashlight.", true, true, bag);
+
+	Item* battery = new Item("battery", "This is the battery of your flashlight. It's still charged.", "There is a battery.", false, true, true, true, flashlight);
 	
-	Item* rusted_key = new Item("key", "A rusted key.", "There is a rusted key", true, true, true, entrance_east, desert);
+
+	// Mural Contents
+	Item* cables = new Item("cables", "A handful of copper cables.", "There are some copper cables.", true, true, true, true, mural);
+	Item* rod = new Item("rod", "A metal rod.", "There's a rod.", true, true, true, true, cables, mural);
+	cables->allowedInteractors.push_back(rod);
+
+	// Item Combinations
+	Item* coil = new Item("coil", "A magnetic coil without a battery.", "There is a coil.", true, true, true, true, battery, NULL);
+	battery->allowedInteractors.push_back(coil);
+
+	Item* magnet = new Item("magnet", "You have a magnet.", "There is a magnet.", true, true, true, true, NULL);
+	Item* rusted_key = new Item("key", "A rusted key.", "There is a rusted key", true, true, true, false, entrance_east, NULL);
+	
+	combinations[new Combination("cables", "rod")] = coil;
+	combinations[new Combination("coil", "battery")] = magnet;
+	combinations[new Combination("magnet", "sand")] = rusted_key;
+
 
 	this->current = desert;
 	this->current->Look();
@@ -98,6 +118,7 @@ void World::Update(ParsedInput msg)
 		return;
 	}
 
+	
 	Entity* target = current->Find(msg.target);
 	if (target == NULL) target = player->Find(msg.target);
 
@@ -108,7 +129,7 @@ void World::Update(ParsedInput msg)
 	}
 
 	Entity* interactor = current->Find(msg.interactor);
-	if (interactor == NULL) player->Find(msg.interactor);
+	if (interactor == NULL) interactor = player->Find(msg.interactor);
 
 	switch (msg.action)
 	{
@@ -130,9 +151,9 @@ void World::Update(ParsedInput msg)
 
 	case use:
 		if (interactor == NULL)
-			target->Use();
+			target->Use(this->combinations);
 		else
-			target->Use(interactor);
+			target->Use(interactor, this->combinations);
 		
 		break;
 

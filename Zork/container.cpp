@@ -3,8 +3,9 @@
 #include <iostream>
 
 // Constructor
-Container::Container(string name, string lockedText, bool isLocked, string openText, string closedText, bool isOpen, string placementText, bool visible, Entity* parent) :
-	Object(name, lockedText, placementText, visible, parent)
+Container::Container(string name, string lockedText, bool isLocked, string openText, string closedText, bool isOpen, 
+						string placementText, bool canPick, bool visible, Entity* parent) :
+	Object(name, lockedText, placementText, canPick, visible, parent)
 {
 	this->isOpen = isOpen;
 	this->isLocked = isLocked;
