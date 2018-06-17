@@ -18,6 +18,9 @@ class Entity
 		// name of the entity
 		string name;
 
+		// text displayed when the entity is looked at
+		string descritption;
+
 		// player can only see visible entities when looking
 		bool visible;
 
@@ -60,10 +63,6 @@ class Entity
 		virtual void SeeContents(void) {};
 
 	protected:
-
-		// text displayed when the entity is looked at
-		string descritption;
-
 		// list of entities contained within this entity
 		list<Entity*> contains;
 };

@@ -4,26 +4,29 @@
 Controller::Controller() 
 {
 	// associate key words with allowed action
-	translate["look"] = look;
-	translate["read"] = look;
+	translate["look"] = LOOK;
+	translate["read"] = LOOK;
 
-	translate["go"] = go;
-	translate["walk"] = go;
-	translate["run"] = go;
+	translate["go"] = GO;
+	translate["walk"] = GO;
+	translate["run"] = GO;
+	translate["cross"] = GO;
 
-	translate["open"] = open;
+	translate["open"] = OPEN;
 
-	translate["close"] = close;
+	translate["close"] = CLOSE;
 
-	translate["use"] = use;
+	translate["use"] = USE;
 
-	translate["take"] = take;
-	translate["grab"] = take;
-	translate["pick"] = take;
+	translate["take"] = TAKE;
+	translate["grab"] = TAKE;
+	translate["pick"] = TAKE;
 
-	translate["drop"] = drop;
+	translate["drop"] = DROP;
 
-	translate["inventory"] = inventory;
+	translate["inventory"] = INVENTORY;
+
+	translate["help"] = HELP;
 
 	for (map<string, Actions>::iterator it = translate.begin(); it != translate.cend(); ++it)
 		this->commands.push_back(it->first);
@@ -54,7 +57,7 @@ ParsedInput Controller::Parse(string input, list<string> targets)
 		output.action = translate[(*it)];
 		break;
 	}
-	if (output.action == none) return output;
+	if (output.action == NONE) return output;
 	
 
 	// Find the target
@@ -75,7 +78,7 @@ ParsedInput Controller::Parse(string input, list<string> targets)
 			}
 			else if (output.target != "" && output.interactor != "")
 			{
-				output.action = none;
+				output.action = NONE;
 				return output;
 			}
 			else if (output.target != ""  && found <= index)

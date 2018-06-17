@@ -5,7 +5,7 @@
 #include <string>
 
 // List of allowed actions
-enum Actions { none, look, go, open, close, use, take, drop, inventory};
+enum Actions { NONE, LOOK, GO, OPEN, CLOSE, USE, TAKE, DROP, INVENTORY, HELP};
 
 enum EntityTypes {ENTITY, ITEM, CONTAINER, ROOM, EXIT};
 
@@ -13,7 +13,7 @@ enum EntityTypes {ENTITY, ITEM, CONTAINER, ROOM, EXIT};
 struct ParsedInput 
 {
 	public: 
-		Actions action = none;
+		Actions action = NONE;
 		std::string target = "";
 		std::string interactor = "";
 };

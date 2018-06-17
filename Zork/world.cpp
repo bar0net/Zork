@@ -27,7 +27,8 @@ World::World(void)
 		"This room has clearly been closed for centuries and the dust has settled. Even though there\n  "
 		"is little light in this stance, you can distinguish some rubble on the floor as some walls\n  "
 		"has clearly collapsed.");
-
+	Room* chamber = new Room("chamber", "");
+	Room* workshop = new Room("workshop", "");
 
 	this->zones.push_back(desert);
 	this->zones.push_back(entrance);
@@ -36,12 +37,15 @@ World::World(void)
 
 	// Define Exits
 	Exit* desert_north = new Exit("north", "Two massive stone columns welcome you to the temple.", "The entrance to the temple lies to the north.", desert, entrance);
+	Exit* desert_gates = new Exit("gates", "Two massive stone columns welcome you to the temple.", "", desert, entrance);
 
 	Exit* entrance_south = new Exit("south", "Two massive stone columns preside the exit of the temple.", "The gates to the desert lie to the south.", entrance, desert);
+	Exit* entrance_gates = new Exit("gates", "Two massive stone columns preside the exit of the temple.", "", entrance, desert);
 	Exit* entrance_east = new Exit("door", "The door has rusted and the decorations have deteriorated.\n  Time has clearly takem its toll on this door.",
 		"There is a rusted door at one side of the room.", true, entrance, rubble);
 	Exit* entrance_north = new Exit("north", "You can see a long hallway with pictograms on the walls and long extinguished torches.", "On the northern part of"
 		"of the room, you can see a long hallway", entrance, mural);
+	Exit* entrance_hallway = new Exit("hallway", "You can see a long hallway with pictograms on the walls and long extinguished torches.", "", entrance, mural);
 
 	Exit* rubble_west = new Exit("west", "You can see a glimpse of the entrance hall through the door.", 
 		"Through the darkness, you can sense the rusted door to the west.", rubble, entrance);
@@ -50,6 +54,22 @@ World::World(void)
 
 	Exit* mural_south = new Exit("south", "You can see a long hallway with pictograms on the walls and long extinguished torches.",
 		"On the southern part of the room, you can see a long hallway", mural, entrance);
+	Exit* mural_hallway = new Exit("hallway", "You can see a long hallway with pictograms on the walls and long extinguished torches.", "", mural, entrance);
+	Exit* mural_west = new Exit("west", "You can see a small door on the west wall, it seems to be decorated with pictograms of artisans and crafters.",
+		"There is a small door in the west wall.", mural, chamber);
+	Exit* mural_door = new Exit("door", "You can see a small door on the west wall, it seems to be decorated with pictograms of artisans and crafters.", "", mural, chamber);
+
+	Exit* chambers_east = new Exit("east", "Through the small door you can catch a glipse of the amazing mural on the room ahead.",
+		"You can see a small door along the east wall.", chamber, mural);
+	Exit* chambers_door = new Exit("door", "Through the small door you can catch a glipse of the amazing mural on the room ahead.", "", chamber, mural);
+	Exit* chambers_hole = new Exit("hole", "This tomb is not inmune to the hazards of time. A collapse has created a hole were there used to be a door.",
+		"There's a hole on the southern wall of this chamber", chamber, workshop);
+	Exit* chambers_south = new Exit("south", "This tomb is not inmune to the hazards of time." 
+		"A collapse has created a hole were there used to be a door.", "", chamber, workshop);
+
+	Exit* workshop_north = new Exit("north", "Sismic activity has transformed what it used to be a door into a hole. It looks safe to cross at the moment...",
+		"There is a hole in the northern part of the workshop", workshop, chamber);
+	Exit* workshop_hole = new Exit("hole", "Sismic activity has transformed what it used to be a door into a hole. It looks safe to cross at the moment...", "", workshop, chamber);
 
 	// Desert contents
 	Container* bag = new Container("bag", "", false, "You can see the contents of your bag.", 
@@ -101,14 +121,18 @@ World::~World(void)
 
 void World::Update(ParsedInput msg)
 {
-	if (msg.action == none)
+	if (msg.action == NONE)
 	{
 		cout << "I don't understand what you want to do..." << endl << "  ";
 		return;
 	}
 
 	// special actions without target
-	if (msg.action == inventory)
+
+	if (msg.action == LOOK && msg.target == "player")
+		cout << this->player->descritption << endl << "  ";
+
+	if (msg.action == INVENTORY || ((msg.action == LOOK && msg.target == "player")))
 	{
 		string text = this->player->ListContents();
 
@@ -119,10 +143,22 @@ void World::Update(ParsedInput msg)
 		return;
 	}
 
+	if (msg.action == HELP)
+	{
+		cout << "To navigate the world of myZork you just need to state what you want to do.\n  "
+				"You can 'look' around to explore your surroundings. 'Open' and 'close' containers\n  "
+				"to reach their interior and maybe 'take' some items to your 'inventory'. You can\n  "
+				"'use' some of these items on other objects to unlock some new possibilities.\n  "
+				"By the way, you can always 'drop' the items you don't need on the room or inside\n  "
+				"a container" << endl << "  ";
+		return;
+	}
+
 
 	if (msg.target == "")
 	{
-		cout << "I don't understand what is the target of your action..." << endl << "  ";
+		if (msg.action == GO) cout << "You can't go there..." << endl << "  ";
+		else cout << "I don't understand what is the target of your action..." << endl << "  ";
 		return;
 	}
 
@@ -141,23 +177,23 @@ void World::Update(ParsedInput msg)
 
 	switch (msg.action)
 	{
-	case look:
+	case LOOK:
 		target->Look();
 		break;
 
-	case go:
+	case GO:
 		CurrentPosition(target->Go());
 		break;
 
-	case open:
+	case OPEN:
 		target->Open();
 		break;
 
-	case close:
+	case CLOSE:
 		target->Close();
 		break;
 
-	case use:
+	case USE:
 		if (interactor == NULL)
 			target->Use(this->combinations);
 		else
@@ -165,11 +201,11 @@ void World::Update(ParsedInput msg)
 		
 		break;
 
-	case take:
+	case TAKE:
 		target->Take(this->player);
 		break;
 
-	case drop:
+	case DROP:
 		if (interactor == NULL)
 			target->Drop(this->current);
 		else
