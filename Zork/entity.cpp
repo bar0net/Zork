@@ -135,7 +135,7 @@ void Entity::Use(map<Combination*, Entity*> combinations)
 }
 
 
-void Entity::Use(Entity* target, map<Combination*, Entity*> combinations)
+void Entity::Use(Entity* target, Entity* location, map<Combination*, Entity*> combinations)
 {
 	cout << "You cannot combine those items." << endl << "  ";
 }

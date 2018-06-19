@@ -20,7 +20,7 @@ class Item : public Object
 		~Item();
 		
 		// Actions
-		void Use(Entity* target, map<Combination*, Entity*> combinations);
+		void Use(Entity* target, Entity* location, map<Combination*, Entity*> combinations);
 		void UsedOn(void);
 
 	private:
@@ -30,7 +30,7 @@ class Item : public Object
 		bool destroyOnUse;
 
 		bool CanInteract(Entity* entity);
-		Entity* GetCombination(string name1, string name2, map<Combination*, Entity*> combinations);
+		Entity* GetCombination(string name1, string name2, string location, map<Combination*, Entity*> combinations);
 };
 
 #endif // !_ZORK_ITEM_

@@ -55,7 +55,7 @@ class Entity
 		virtual void Take(Entity* parent);
 		virtual void Drop(Entity* parent);
 		virtual void Use(map<Combination*, Entity*> combinations);
-		virtual void Use(Entity* target, map<Combination*, Entity*> combinations);
+		virtual void Use(Entity* target, Entity* location, map<Combination*, Entity*> combinations);
 		virtual void UsedOn(void) {};
 
 		// Visible 'Objects' will reveal themselves when you

@@ -31,7 +31,7 @@ Item::~Item()
 
 
 // Use the item on the target
-void Item::Use(Entity* target, map<Combination*, Entity*> combinations)
+void Item::Use(Entity* target, Entity* location, map<Combination*, Entity*> combinations)
 {
 	if (this->allowedInteractors.size() == 0) 
 	{
@@ -41,26 +41,42 @@ void Item::Use(Entity* target, map<Combination*, Entity*> combinations)
 
 	bool found = CanInteract(target);
 
-	if (!found)	cout << "You can't do this." << endl << "  ";
+	if (!found) 
+	{
+		cout << "You can't do this." << endl << "  ";
+		return;
+	}
 
-	cout << "You used the " << this->name << " on the " << target->name << " and it worked.";
+	cout << "You used the " << this->name << " on the " << target->name;
 
 	if (target->type == ITEM) 
 	{
-		Item* i = (Item*)this->GetCombination(this->name, target->name, combinations);
+		Item* i = (Item*)this->GetCombination(this->name, target->name, location->name, combinations);
 		
 		if (i != NULL)
 		{
 			i->parent = this->parent;
-			i->parent->Add(i);
 
-			cout << "You created a " << i->name;
-			if (i->parent->name == "player") cout << " and you put it on your inventory.";
-			else if (i->parent->type == ROOM) cout << " and your left it on the floor.";
-			else cout << " and your left it in the " << i->parent->name << ".";
+			cout << " and you created a " << i->name;
+			if (this->parent->name == "player")
+			{
+				i->parent = this->parent;
+				cout << " and you put it on your inventory";
+			}
+			else
+			{
+				i->parent = location;
+				cout << " and your left it on the floor";
+			}
+			i->parent->Add(i);
+		}
+		else 
+		{
+			cout << " but it doesn't seem to be the right place for that" << endl << "  ";
+			return;
 		}
 	}
-	cout << endl << "  ";
+	cout << "." << endl << "  ";
 
 
 	if (this->destroyOnUse) 
@@ -89,7 +105,7 @@ bool Item::CanInteract(Entity* entity)
 	bool found = false;
 	for (list<Entity*>::iterator it = this->allowedInteractors.begin(); it != this->allowedInteractors.cend(); ++it)
 	{
-		if (*it == entity)
+		if ((*it) -> name == entity->name)
 		{
 			found = true;
 			break;
@@ -99,16 +115,22 @@ bool Item::CanInteract(Entity* entity)
 	return found;
 }
 
-Entity* Item::GetCombination(string name1, string name2, map<Combination*, Entity*> combinations)
+Entity* Item::GetCombination(string name1, string name2, string location, map<Combination*, Entity*> combinations)
 {
 	Combination* c = new Combination(name1, name2);
 
 	for (map<Combination*, Entity*>::iterator it = combinations.begin(); it != combinations.cend(); ++it) 
 	{
-		if (c->inputA == (*it).first->inputA && c->inputB == (*it).first->inputB) return (*it).second;
+		if (c->inputA == (*it).first->inputA && c->inputB == (*it).first->inputB)
+		{
+			if ((*it).first->location == "" || (*it).first->location == location)
+				return (*it).second;
+			else
+				return NULL;
+		}
 	}
 
-	cout << "[DEBUG] NO MAP" << endl << "  ";
+	// cout << "[DEBUG] NO MAP" << endl << "  ";
 
 	return NULL;
 }

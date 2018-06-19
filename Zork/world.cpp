@@ -13,7 +13,7 @@ World::World(void)
 	this->player = new Character("player", "I look wonderful in cargo shorts and a kaki shirt.");
 
 	// Zones
-	Room* desert = new Room("desert", "You find yourself in front of the entrance of an ancent tomb surrounded by miles of desert.");
+	Room* desert = new Room("desert", "You find yourself in front of the entrance of an ancent\n  tomb surrounded by miles of desert.");
 	Room* entrance = new Room("entrance",
 		"The entrance hall is deemly lit. Looking at the vivid pictograms\n  that decorate this stance," 
 		" it becomes clear that the last king of\n  Anatria was powerful and beloved by his subjects.");
@@ -87,15 +87,40 @@ World::World(void)
 	
 	Item* sand = new Item("sand", "There's sand for as long as the eye can see. The dunes shift slightly with every gust \n  "
 		"of wind and it and you can't avoid thinking about the many wonders that may lay buried under them.",
-		"The tomb is surrounded by an unhospitable desert with sand shining defiant under the blazing sun.", true, false, false, false, desert);
+		"The tomb is surrounded by an unhospitable desert with sand\n  shining defiant under the blazing sun.", true, false, false, false, desert);
 
 	// Mural Contents
 	Item* cables = new Item("cables", "A handful of copper cables.", "There are some copper cables.", true, true, true, true, mural);
-	Item* rod = new Item("rod", "A metal rod.", "There's a rod.", true, true, true, true, cables, mural);
-	cables->allowedInteractors.push_back(rod);
+	Container* cam_case = new Container("case", "It's an old camera case, probably from the 1970s. It has a small combination padlock.", true, 
+		"It's an old camera case, probably from the 1970s.", "It's an old camera case, probably from the 1970s.", 
+		false, "You can see an old case on the floor.", false, true, mural);
+	Item* camera = new Item("camera", "It's just an old camera and it seems to be mostly broken.", "There is a camera",
+		false, true, true, true, cam_case);
+	Item* stuck_lens = new Item("lens", "The lens is stuck in the camera, maybe a gentle hit would losen it.", "The only part that seems salvageable is the lens.", true,
+		false, true, true, camera);
 
 	// Rubble Room Contents
-	Item* red_orb = new Item("red orb", "It appears to a ceramic material with a crystaline structure but it glows in the dark and you can't fathom why.", "You can see a glowing red orb.", true, true, true, true, rubble);
+	Item* red_orb = new Item("red orb", "It appears to a ceramic material with a crystaline structure but it glows in the dark and you can't fathom why.", 
+		"You can see a glowing red orb.", true, true, true, true, rubble);
+	Item* vase = new Item("vase", "It's an old vase with a strange viscous liquid inside. Is this goo flamable?",
+		"Thanks to a faint streak of light, you can see a small vase in the chamber.", true, false, true, true, chamber);
+
+	// Chamber Contents
+	Item* corpse = new Item("corpse", "By his attire, you adventure to guess he was an archeologist but he appears to have been dead for decades.\n  "
+		"At this point, you can't say what was the cause of his demise. Thirst? Starvation? Health issue? Or maybe\n  "
+		"something else... ", "There is a rotten corpse near the entrance of the room.", true, false, false, false, chamber);
+	Item* combination = new Item("paper", "It's a small piece of paper with a combination in it.", "You can see a piece of paper sticking out.", true, true, true, true, cam_case, corpse);
+
+	// Workshop Contents
+	Item* tools = new Item("tools", "There is a bunch of old, mostly rusted and almost destroyed tools.",
+		"In one corner of the room you can see a collection of tools probably used by\n  the artisans who worked on the tomb", true, false, false, false, workshop);
+	Item* rod = new Item("rod", "A metal rod.", "There's a metal rod.", true, true, true, true, cables, tools);
+	cables->allowedInteractors.push_back(rod);
+	Item* stick = new Item("wood", "An undefined type of wood of some sorts. It's a little moist, though...", "There is some wood.", true, true, true, true, vase, tools);
+	Item* hammer = new Item("hammer", "It's an old ceremonial hammer. It seems really fragile.", "You can see a hammer.", true, true, true, true, stuck_lens, tools);
+	stuck_lens->allowedInteractors.push_back(hammer);
+	Item* tongs = new Item("tongs", "These tongs were made by a good blacksmith.\n  They are not only still functional, but also they have quite fancy engravings.",
+		"There are some tongs.", true, true, false, false, tools);
 
 	// Item Combinations
 	Item* coil = new Item("coil", "A magnetic coil without a battery.", "There is a coil.", true, true, true, true, battery, NULL);
@@ -105,10 +130,19 @@ World::World(void)
 	sand->allowedInteractors.push_back(magnet);
 
 	Item* rusted_key = new Item("key", "A rusted key.", "There is a rusted key", true, true, true, false, entrance_east, NULL);
+
+	Item* lens = new Item("lens", "A plain old camera lens.", "You can see what it used to be the lens of a camera", true, true, true, true, NULL);
+	Item* soaked_stick = new Item("stick", "A wooden stick soaken in some strange goo.", "There is a wooden stick.", true, true, true, true, lens, NULL);
+	lens->allowedInteractors.push_back(soaked_stick);
 	
+	Item* torch = new Item("torch", "A flaming, bright torch you built yourself. You feel accomplished.", "A torch brightens the place.", true, true, true, true, NULL);
+
 	combinations[new Combination("cables", "rod")] = coil;
 	combinations[new Combination("coil", "battery")] = magnet;
 	combinations[new Combination("magnet", "sand")] = rusted_key;
+	combinations[new Combination("hammer", "lens")] = lens;
+	combinations[new Combination("wood", "vase")] = soaked_stick;
+	combinations[new Combination("stick", "lens", "desert")] = torch;
 
 
 	this->current = desert;
@@ -199,7 +233,7 @@ void World::Update(ParsedInput msg)
 		if (interactor == NULL)
 			target->Use(this->combinations);
 		else
-			target->Use(interactor, this->combinations);
+			target->Use(interactor, current, this->combinations);
 		
 		break;
 
