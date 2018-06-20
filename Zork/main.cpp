@@ -1,6 +1,7 @@
 #include <iostream>
 #include <algorithm>
 #include <string>
+#include <conio.h>
 
 #include "world.h"
 #include "controller.h"
@@ -42,7 +43,9 @@ string ReadInput(void)
 // Things to do before closing the game
 void End(void)
 {
-	cout << "Thanks for playing!  " << endl;
+	cout << "Thanks for playing!" << endl << endl;
+	cout << "  -- Press any key to close. -- " << endl;
+	_getch();
 }
 
 

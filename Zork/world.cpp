@@ -31,11 +31,15 @@ World::World(void)
 	Room* workshop = new Room("workshop", "This appears to be a small room used by the artisans who worked on the tomb.\n  "
 		"You can see the rests of some old broken tools, they don't work\n  "
 		"anymore but they would make a hell of an exhibition in a museum.");
+	Room* tomb = new Room("tomb", "You find yourself in the burial site surrounded by uncountable riches.");
 
 	this->zones.push_back(desert);
 	this->zones.push_back(entrance);
 	this->zones.push_back(mural);
 	this->zones.push_back(rubble);
+	this->zones.push_back(chamber);
+	this->zones.push_back(workshop);
+	this->zones.push_back(tomb);
 
 	// Define Exits
 	Exit* desert_north = new Exit("north", "Two massive stone columns welcome you to the temple.", "The entrance to the temple lies to the north.", desert, entrance);
@@ -45,7 +49,7 @@ World::World(void)
 	Exit* entrance_gates = new Exit("gates", "Two massive stone columns preside the exit of the temple.", "", entrance, desert);
 	Exit* entrance_east = new Exit("door", "The door has rusted and the decorations have deteriorated.\n  Time has clearly takem its toll on this door.",
 		"There is a rusted door at one side of the room.", true, entrance, rubble);
-	Exit* entrance_north = new Exit("north", "You can see a long hallway with pictograms on the walls and long extinguished torches.", "On the northern part of"
+	Exit* entrance_north = new Exit("north", "You can see a long hallway with pictograms on the walls and long extinguished torches.", "On the northern part "
 		"of the room, you can see a long hallway", entrance, mural);
 	Exit* entrance_hallway = new Exit("hallway", "You can see a long hallway with pictograms on the walls and long extinguished torches.", "", entrance, mural);
 
@@ -60,6 +64,9 @@ World::World(void)
 	Exit* mural_west = new Exit("west", "You can see a small door on the west wall, it seems to be decorated with pictograms of artisans and crafters.",
 		"There is a small door in the west wall.", mural, chamber);
 	Exit* mural_door = new Exit("door", "You can see a small door on the west wall, it seems to be decorated with pictograms of artisans and crafters.", "", mural, chamber);
+
+	Exit* mural_gates = new Exit("gate", "Somehow, the interaction between the two orbs has opened a new gate in this room. Where could it lead?",
+		"The orbs have opened a new gate.", false, NULL, tomb);
 
 	Exit* chambers_east = new Exit("east", "Through the small door you can catch a glipse of the amazing mural on the room ahead.",
 		"You can see a small door along the east wall.", chamber, mural);
@@ -109,7 +116,11 @@ World::World(void)
 	Item* corpse = new Item("corpse", "By his attire, you adventure to guess he was an archeologist but he appears to have been dead for decades.\n  "
 		"At this point, you can't say what was the cause of his demise. Thirst? Starvation? Health issue? Or maybe\n  "
 		"something else... ", "There is a rotten corpse near the entrance of the room.", true, false, false, false, chamber);
-	Item* combination = new Item("paper", "It's a small piece of paper with a combination in it.", "You can see a piece of paper sticking out.", true, true, true, true, cam_case, corpse);
+	Item* combination = new Item("paper", "It's a small piece of paper with a combination in it.", 
+		"You can see a piece of paper sticking out.", true, true, true, true, cam_case, corpse);
+	Item* crack = new Item("crack", "There is a small crack on the wall.", "You can now see a small crack on the wall", true, false, false, false, NULL);
+	Item* blue_orb = new Item("blue orb", "It appears to a ceramic material with a crystaline structure but it glows in the dark and you can't fathom why.",
+		"You can see a glowing blue orb.", true, true, true, true, crack);
 
 	// Workshop Contents
 	Item* tools = new Item("tools", "There is a bunch of old, mostly rusted and almost destroyed tools.",
@@ -135,15 +146,20 @@ World::World(void)
 	Item* soaked_stick = new Item("stick", "A wooden stick soaken in some strange goo.", "There is a wooden stick.", true, true, true, true, lens, NULL);
 	lens->allowedInteractors.push_back(soaked_stick);
 	
-	Item* torch = new Item("torch", "A flaming, bright torch you built yourself. You feel accomplished.", "A torch brightens the place.", true, true, true, true, NULL);
+	Item* torch = new Item("torch", "A flaming, bright torch you built yourself. You feel accomplished.", "A torch brightens the place.", true, true, true, true, chamber, NULL);
 
-	combinations[new Combination("cables", "rod")] = coil;
-	combinations[new Combination("coil", "battery")] = magnet;
-	combinations[new Combination("magnet", "sand")] = rusted_key;
-	combinations[new Combination("hammer", "lens")] = lens;
-	combinations[new Combination("wood", "vase")] = soaked_stick;
-	combinations[new Combination("stick", "lens", "desert")] = torch;
+	combinations[new Combination("cables", "rod", "You roll the copper cable around the rod forming a coil.")] = coil;
+	combinations[new Combination("coil", "battery", "By attaching a battery to the coil, you get a magnet. Yey physics!")] = magnet;
+	combinations[new Combination("magnet", "sand", "As you explore the desert with your magnet, you find a rusted key burried in the sand.")] = rusted_key;
+	combinations[new Combination("hammer", "lens", "You manage to losen the lens and take it out.")] = lens;
+	combinations[new Combination("wood", "vase", "You submerge most of the wooden branch on the weird goo. You now have a soaked stick.")] = soaked_stick;
+	combinations[new Combination("stick", "lens", "You use the camera lens to focus the solar rays and"
+		" light your stick on fire. You now have a torch!", "desert")] = torch;
+	combinations[new Combination("torch", "chamber", "The light of your torch reveal a crack on the wall.")] = crack;
 
+	blue_orb->allowedInteractors.push_back(red_orb);
+	red_orb->allowedInteractors.push_back(blue_orb);
+	combinations[new Combination("blue orb", "red orb", "You hear a loud noise while a gate opens in the room.", "mural")] = mural_gates;
 
 	this->current = desert;
 	this->current->Look();
@@ -176,6 +192,11 @@ void World::Update(ParsedInput msg)
 			cout << "My inventory is empty." << endl << "  ";
 		else
 			cout << "I am currently carrying: " << text.substr(0,text.size()-2) << "." << endl << "  ";
+		return;
+	}
+	if (msg.action == LOOK && (msg.target == "room" || msg.target == "place"))
+	{
+		current->Look();
 		return;
 	}
 
@@ -270,6 +291,10 @@ list<string> World::Visible(void)
 	list<string> invent = player->Visible();
 	
 	world.merge(invent);
+
+	// special command
+	world.push_back("room");
+	world.push_back("place");
 
 	return world;
 }

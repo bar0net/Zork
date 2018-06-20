@@ -8,12 +8,14 @@ using namespace std;
 
 struct Combination
 {
-	string inputA;
-	string inputB ;
-	string location;
+	public:
+		string inputA;
+		string inputB ;
+		string location;
+		string msg;
 	
-	Combination(string input1, string input2);
-	Combination(string input1, string input2, string location);
+		Combination(string input1, string input2, string msg);
+		Combination(string input1, string input2, string msg, string location);
 };
 
 #endif // !_ZORK_COMBINATIONS_

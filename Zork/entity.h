@@ -11,6 +11,7 @@
 
 using namespace std;
 
+
 // Anything that is physically present in the game world
 class Entity 
 {
@@ -66,6 +67,7 @@ class Entity
 		// list of entities contained within this entity
 		list<Entity*> contains;
 };
+
 
 
 #endif // !_ZORK_ENTITY_

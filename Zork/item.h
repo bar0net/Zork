@@ -7,6 +7,18 @@
 #include "room.h"
 #include "container.h"
 
+struct Result
+{
+	Entity* item;
+	string msg;
+
+	Result(Entity* item, string msg)
+	{
+		this->item = item;
+		this->msg = msg;
+	}
+};
+
 class Item : public Object
 {
 	public:
@@ -30,7 +42,7 @@ class Item : public Object
 		bool destroyOnUse;
 
 		bool CanInteract(Entity* entity);
-		Entity* GetCombination(string name1, string name2, string location, map<Combination*, Entity*> combinations);
+		Result* GetCombination(string name1, string name2, string location, map<Combination*, Entity*> combinations);
 };
 
 #endif // !_ZORK_ITEM_

@@ -14,6 +14,8 @@ class Exit : public Entity
 		Entity* Go(void);
 		void UsedOn(void);
 		void SeeContents(void);
+		void Open(void);
+		void Close(void);
 
 	private:
 		bool locked;

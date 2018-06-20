@@ -33,63 +33,75 @@ Item::~Item()
 // Use the item on the target
 void Item::Use(Entity* target, Entity* location, map<Combination*, Entity*> combinations)
 {
+	// Exit if this item has no allowed interactors
 	if (this->allowedInteractors.size() == 0) 
 	{
 		cout << "You can't use this." << endl << "  ";
 		return;
 	}
 
+	// If it has interactors, check if the target item is among them
 	bool found = CanInteract(target);
-
 	if (!found) 
 	{
 		cout << "You can't do this." << endl << "  ";
 		return;
 	}
-
-	cout << "You used the " << this->name << " on the " << target->name;
-
-	if (target->type == ITEM) 
+	
+	// if target is an Item, check if there is a viable combination
+	if (target->type == ITEM || target->type == ROOM) 
 	{
-		Item* i = (Item*)this->GetCombination(this->name, target->name, location->name, combinations);
+		Result* r = this->GetCombination(this->name, target->name, location->name, combinations);
 		
-		if (i != NULL)
+		if (r != NULL)
 		{
-			i->parent = this->parent;
-
-			cout << " and you created a " << i->name;
-			if (this->parent->name == "player")
+			if ((*r).item->type == ITEM)
 			{
+				Item* i = (Item*)(*r).item;
 				i->parent = this->parent;
-				cout << " and you put it on your inventory";
+				cout << (*r).msg;
+
+				if (this->parent->name == "player" && i->canPick == true)
+				{
+					i->parent = this->parent;
+					i->canPick = false;
+					i->canDrop = true;
+				}
+				else
+				{
+					i->parent = location;
+
+					if (target->name != location->name)
+						cout << " But you dropped it on the floor.";
+				}
+				cout << endl << "  ";
+				i->parent->Add(i);
 			}
-			else
+			else if ((*r).item->type == EXIT)
 			{
-				i->parent = location;
-				cout << " and your left it on the floor";
+				Room* i = (Room*)(*r).item;
+				cout << (*r).msg << endl << "  ";
+				// i->UsedOn(); // unlock for safety
+				location->Add(i);
 			}
-			i->parent->Add(i);
 		}
 		else 
 		{
-			cout << " but it doesn't seem to be the right place for that" << endl << "  ";
+			cout << "You try but it doesn't seem to be the right place for that." << endl << "  ";
 			return;
 		}
 	}
-	cout << "." << endl << "  ";
-
-
-	if (this->destroyOnUse) 
+	else if(target->type == CONTAINER) 
 	{
-		cout << this->name;
-		delete this;
+		cout << "You have succesfully unlocked the " << target->name << endl << "  ";
 	}
-	if (target->type == ITEM) 
+	else if (target->type == EXIT)
 	{
-		if (((Item*)target)->destroyOnUsedOn) cout << " and " << target->name;
+		cout << "You opened the " << target->name << endl << "  ";
 	}
-	cout << " got destroyed." << endl << "  ";
 
+
+	if (this->destroyOnUse) delete this;
 	target->UsedOn();
 } 
 
@@ -115,22 +127,20 @@ bool Item::CanInteract(Entity* entity)
 	return found;
 }
 
-Entity* Item::GetCombination(string name1, string name2, string location, map<Combination*, Entity*> combinations)
+Result* Item::GetCombination(string name1, string name2, string location, map<Combination*, Entity*> combinations)
 {
-	Combination* c = new Combination(name1, name2);
+	Combination* c = new Combination(name1, name2, "");
 
 	for (map<Combination*, Entity*>::iterator it = combinations.begin(); it != combinations.cend(); ++it) 
 	{
 		if (c->inputA == (*it).first->inputA && c->inputB == (*it).first->inputB)
 		{
 			if ((*it).first->location == "" || (*it).first->location == location)
-				return (*it).second;
+				return new Result((*it).second, (*it).first->msg);
 			else
 				return NULL;
 		}
 	}
-
-	// cout << "[DEBUG] NO MAP" << endl << "  ";
 
 	return NULL;
 }
