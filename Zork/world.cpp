@@ -174,11 +174,6 @@ World::World(void)
 
 	this->current = desert;
 
-	cout << "[DEBUG] ";
-	for (list<Entity*>::iterator it = this->current->contains.begin(); it != this->current->contains.cend(); ++it)
-		cout << (*it)->name << ", ";
-	cout << endl << "  ";
-
 	this->current->Look();
 	SearchEnemy();
 }
@@ -248,8 +243,8 @@ void World::SearchEnemy(void)
 		if ((*it)->type == ENEMY) 
 		{
 			this->enemy = (Enemy*)(*it);
-			cout << endl << "  " << "As you enter, you can see the " << this->enemy->name << " defiant and you know it's time to"
-				"engage in the millenial tradition of Rock-Paper-Scissors combat to the death." << endl << endl << "  ";
+			cout << endl << "  " << "As you enter, you can see the " << this->enemy->name << " defiant and you know it's time to \n  "
+				"engage in the millenial tradition of\n  Rock-Paper-Scissors combat to the death." << endl << endl << "  ";
 		}
 	}
 }
