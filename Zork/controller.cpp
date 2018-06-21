@@ -27,6 +27,7 @@ Controller::Controller()
 	translate["drop"] = DROP;
 	translate["put"] = DROP;
 	translate["leave"] = DROP;
+	translate["place"] = DROP;
 
 	translate["inventory"] = INVENTORY;
 

@@ -7,10 +7,12 @@
 class Exit : public Entity
 {
 	public:
+		// Constructors & Destructors
 		Exit(string name, string description, string placement, Entity* parent, Entity* destination);
 		Exit(string name, string description, string placement, bool locked, Entity* parent, Entity* destination);
 		~Exit();
 
+		// Actions
 		Entity* Go(void);
 		void UsedOn(void);
 		void SeeContents(void);
@@ -18,8 +20,13 @@ class Exit : public Entity
 		void Close(void);
 
 	private:
+		// If the exit is locked, the player cannot go through it
 		bool locked;
-		Entity* destination;
+
+		// The room its connected to
+		Entity* destination;		
+		
+		// The text that will be shown when the player "Looks" at the parent
 		string placementText;
 };
 

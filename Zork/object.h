@@ -13,6 +13,7 @@ class Object : public Entity
 		Object(string name, string description, string placementText, bool canPick, bool visible, Entity* parent);
 		~Object();
 
+		// Actions
 		void Take(Entity* player);
 		void Drop(Entity* parent);
 
@@ -30,6 +31,7 @@ class Object : public Entity
 		// Can you take the item out of the inventory
 		bool canDrop;
 
+		// support function
 		void DropAction(Entity* parent);
 };
 

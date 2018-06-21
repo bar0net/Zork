@@ -11,7 +11,7 @@
 
 World::World(void) 
 {
-	this->player = new Player("player", "I look wonderful in cargo shorts and a kaki shirt.", 6);
+	this->player = new Player("player", "I look wonderful in cargo shorts and a kaki shirt.", 6, 100);
 
 	// Zones
 	Room* desert = new Room("desert", "You find yourself in front of the entrance of an ancent\n  tomb surrounded by miles of desert.");
@@ -256,6 +256,8 @@ void World::SearchEnemy(void)
 
 void World::NeutralState(ParsedInput msg)
 {
+	player->Update();
+
 	// special actions without target
 	if (msg.action == LOOK && msg.target == "player")
 		cout << this->player->descritption << endl << "  ";
@@ -349,6 +351,7 @@ void World::NeutralState(ParsedInput msg)
 	default:
 		break;
 	}
+
 }
 
 void World::FightState(ParsedInput msg)

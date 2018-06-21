@@ -63,7 +63,7 @@ int main(void)
 
 		input = ReadInput();
 
-		if (input == "exit") break;
+		if (input == "exit" || input == "quit") break;
 		if (!world->player->Alive())
 		{
 			cout << "\n  You're passion for adventure saw your demise.\n  "
@@ -71,6 +71,7 @@ int main(void)
 				"Your remains will be lost in an unknown tomb in \n  "
 				"the desert, until some other crazy adventurer tries\n  "
 				"to defy the curse of the last king of Anatria." << endl << endl << "  ";
+			break;
 		}
 
 
