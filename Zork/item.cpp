@@ -81,7 +81,6 @@ void Item::Use(Entity* target, Entity* location, map<Combination*, Entity*> comb
 			{
 				Room* i = (Room*)(*r).item;
 				cout << (*r).msg << endl << "  ";
-				// i->UsedOn(); // unlock for safety
 				location->Add(i);
 			}
 		}

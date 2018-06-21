@@ -63,7 +63,9 @@ class Entity
 		// look at their parent entity
 		virtual void SeeContents(void) {};
 
-	protected:
+		// runs every frame
+		// virtual void Update() {};
+
 		// list of entities contained within this entity
 		list<Entity*> contains;
 };

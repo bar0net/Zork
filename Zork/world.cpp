@@ -7,10 +7,11 @@
 #include "item.h"
 #include "exit.h"
 #include "room.h"
+#include "enemy.h"
 
 World::World(void) 
 {
-	this->player = new Character("player", "I look wonderful in cargo shorts and a kaki shirt.");
+	this->player = new Player("player", "I look wonderful in cargo shorts and a kaki shirt.", 7);
 
 	// Zones
 	Room* desert = new Room("desert", "You find yourself in front of the entrance of an ancent\n  tomb surrounded by miles of desert.");
@@ -161,8 +162,25 @@ World::World(void)
 	red_orb->allowedInteractors.push_back(blue_orb);
 	combinations[new Combination("blue orb", "red orb", "You hear a loud noise while a gate opens in the room.", "mural")] = mural_gates;
 
+	// Enemies
+	Enemy* king = new Enemy("king", "The rotten corpse of the las king of Anatria.", 3,
+		"\n  You defeat the mummified corpse of the old king.\n  "
+		"Now the tumb remains ungarded and all these vast amounts\n  "
+		"of riches are yours for the taking. You are already dreaming\n  "
+		"of traveling the world and relaxing in luxourios beaches in\n  "
+		"the Caribbean. Oh, life!\n  "
+		"Well, that is if you manage to find your way back to\n  "
+		"civilization. You are in the middle of the desert after all.\n  ", tomb);
+
 	this->current = desert;
+
+	cout << "[DEBUG] ";
+	for (list<Entity*>::iterator it = this->current->contains.begin(); it != this->current->contains.cend(); ++it)
+		cout << (*it)->name << ", ";
+	cout << endl << "  ";
+
 	this->current->Look();
+	SearchEnemy();
 }
 
 World::~World(void) 
@@ -173,33 +191,15 @@ World::~World(void)
 
 void World::Update(ParsedInput msg)
 {
+	// Unspecified Actions
+	// No action passed
 	if (msg.action == NONE)
 	{
 		cout << "I don't understand what you want to do..." << endl << "  ";
 		return;
 	}
 
-	// special actions without target
-
-	if (msg.action == LOOK && msg.target == "player")
-		cout << this->player->descritption << endl << "  ";
-
-	if (msg.action == INVENTORY || ((msg.action == LOOK && msg.target == "player")))
-	{
-		string text = this->player->ListContents();
-
-		if (text == "")
-			cout << "My inventory is empty." << endl << "  ";
-		else
-			cout << "I am currently carrying: " << text.substr(0,text.size()-2) << "." << endl << "  ";
-		return;
-	}
-	if (msg.action == LOOK && (msg.target == "room" || msg.target == "place"))
-	{
-		current->Look();
-		return;
-	}
-
+	// Help command
 	if (msg.action == HELP)
 	{
 		cout << "To navigate the world of myZork you just need to state what you want to do.\n  "
@@ -211,67 +211,9 @@ void World::Update(ParsedInput msg)
 		return;
 	}
 
-
-	if (msg.target == "")
-	{
-		if (msg.action == GO) cout << "You can't go there..." << endl << "  ";
-		else cout << "I don't understand what is the target of your action..." << endl << "  ";
-		return;
-	}
-
 	
-	Entity* target = current->Find(msg.target);
-	if (target == NULL) target = player->Find(msg.target);
-
-	if (target == NULL) 
-	{
-		cout << "[World::Update] Could not find the target <<" << msg.target << ">> for this action.";
-		return;
-	}
-
-	Entity* interactor = current->Find(msg.interactor);
-	if (interactor == NULL) interactor = player->Find(msg.interactor);
-
-	switch (msg.action)
-	{
-	case LOOK:
-		target->Look();
-		break;
-
-	case GO:
-		CurrentPosition(target->Go());
-		break;
-
-	case OPEN:
-		target->Open();
-		break;
-
-	case CLOSE:
-		target->Close();
-		break;
-
-	case USE:
-		if (interactor == NULL)
-			target->Use(this->combinations);
-		else
-			target->Use(interactor, current, this->combinations);
-		
-		break;
-
-	case TAKE:
-		target->Take(this->player);
-		break;
-
-	case DROP:
-		if (interactor == NULL)
-			target->Drop(this->current);
-		else
-			target->Drop(interactor);
-		break;
-
-	default:
-		break;
-	}
+	if (this->enemy != NULL) FightState(msg);
+	else NeutralState(msg);
 }
 
 
@@ -297,4 +239,148 @@ list<string> World::Visible(void)
 	world.push_back("place");
 
 	return world;
+}
+
+void World::SearchEnemy(void)
+{
+	for (list<Entity*>::iterator it = current->contains.begin(); it != current->contains.cend(); ++it)
+	{
+		if ((*it)->type == ENEMY) this->enemy = (Enemy*)(*it);
+	}
+}
+
+void World::NeutralState(ParsedInput msg)
+{
+	// special actions without target
+	if (msg.action == LOOK && msg.target == "player")
+		cout << this->player->descritption << endl << "  ";
+	if (msg.action == INVENTORY || ((msg.action == LOOK && msg.target == "player")))
+	{
+		string text = this->player->ListContents();
+
+		if (text == "")
+			cout << "My inventory is empty." << endl << "  ";
+		else
+			cout << "I am currently carrying: " << text.substr(0, text.size() - 2) << "." << endl << "  ";
+		return;
+	}
+	if (msg.action == LOOK && (msg.target == "room" || msg.target == "place"))
+	{
+		current->Look();
+		return;
+	}
+
+	// Non targeted
+	if (msg.target == "")
+	{
+		if (msg.action == GO) cout << "You can't go there..." << endl << "  ";
+		else cout << "I don't understand what is the target of your action..." << endl << "  ";
+
+		return;
+	}
+
+	Entity* target = current->Find(msg.target);
+	if (target == NULL) target = player->Find(msg.target);
+
+	if (target == NULL)
+	{
+		cout << "[World::Update] Could not find the target <<" << msg.target << ">> for this action.";
+		return;
+	}
+
+	Entity* interactor = current->Find(msg.interactor);
+	if (interactor == NULL) interactor = player->Find(msg.interactor);
+
+	switch (msg.action)
+	{
+	case LOOK:
+		target->Look();
+		break;
+
+	case GO:
+		CurrentPosition(target->Go());
+		SearchEnemy();
+		break;
+
+	case OPEN:
+		target->Open();
+		break;
+
+	case CLOSE:
+		target->Close();
+		break;
+
+	case USE:
+		if (interactor == NULL)
+			target->Use(this->combinations);
+		else
+			target->Use(interactor, current, this->combinations);
+
+		break;
+
+	case TAKE:
+		target->Take(this->player);
+		break;
+
+	case DROP:
+		if (interactor == NULL)
+			target->Drop(this->current);
+		else
+			target->Drop(interactor);
+		break;
+
+	case ROCK:
+		cout << "You are not currently in a fight!" << endl << "  ";
+		break;
+
+	case PAPER:
+		cout << "You are not currently in a fight!" << endl << "  ";
+		break;
+
+	case SCISSORS:
+		cout << "You are not currently in a fight!" << endl << "  ";
+		break;
+
+	default:
+		break;
+	}
+}
+
+void World::FightState(ParsedInput msg)
+{
+	if (msg.action == PAPER) cout << "You show paper ";
+	else if (msg.action == ROCK) cout << "You show rock ";
+	else if (msg.action == SCISSORS) cout << "You show scissors ";
+	else 
+	{
+		cout << "You are in a life or death fight. Focus!" << endl << "  ";
+		return;
+	}
+
+	Actions rps = this->enemy->Update();
+
+	if (rps == PAPER) cout << "and the " << this->enemy->name << " shows paper. ";
+	else if (rps == ROCK) cout << "and the " << this->enemy->name << " shows rock. ";
+	else if (rps == SCISSORS) cout << "and the " << this->enemy->name << " shows scissors. ";
+
+	int result = (3 + ((int)msg.action - (int)rps)) % 3;
+
+	if (result == 0)
+		cout << "It's a draw!" << endl << "  ";
+	else if (result == 1)
+	{
+		cout << "You win!" << endl << "  ";
+		this->enemy->Hit();
+		if (!this->enemy->Alive())
+		{
+			if (this->enemy->name == "king") this->gameOver = true;
+			delete this->enemy;
+			this->enemy = NULL;
+		}
+	}
+	else
+	{
+		cout << "You lose and take damage!" << endl << "  ";
+		player->Hit();
+	}
 }

@@ -63,10 +63,21 @@ int main(void)
 
 		input = ReadInput();
 
-		if (input == "exit" || !world->player->Alive()) break;
+		if (input == "exit") break;
+		if (!world->player->Alive())
+		{
+			cout << "\n  You're passion for adventure saw your demise.\n  "
+				"You tried valiently, but ultimately you failed.\n  "
+				"Your remains will be lost in an unknown tomb in \n  "
+				"the desert, until some other crazy adventurer tries\n  "
+				"to defy the curse of the last king of Anatria." << endl << endl << "  ";
+		}
+
 
 		ParsedInput msg = controller.Parse(input, world->Visible());
 		world->Update(msg);
+
+		if (world->gameOver) break;
 	}
 
 	End();

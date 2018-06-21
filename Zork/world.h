@@ -8,7 +8,8 @@
 #include "globals.h"
 #include "entity.h"
 #include "combinations.h"
-#include "character.h"
+#include "player.h"
+#include "enemy.h"
 
 class World
 {
@@ -18,13 +19,16 @@ class World
 		~World();
 
 		// player description and inventory
-		Character* player;
+		Player* player;
 
 		// Things to do every frame
 		void Update(ParsedInput msg);
 
 		// Return the list of visible entities in the current zone
 		list<string> Visible();
+
+		// Have we reach a successful end of the game
+		bool gameOver = false;
 
 
 	private:
@@ -40,6 +44,13 @@ class World
 
 		// Updates current player position
 		void CurrentPosition(Entity* room);
+
+		Enemy* enemy = NULL;
+
+		void SearchEnemy(void);
+
+		void NeutralState(ParsedInput msg);
+		void FightState(ParsedInput msg);
 };
 
 #endif // !_ZORK_WORLD_

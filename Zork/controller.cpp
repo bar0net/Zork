@@ -32,6 +32,10 @@ Controller::Controller()
 
 	translate["help"] = HELP;
 
+	translate["rock"] = ROCK;
+	translate["paper"] = PAPER;
+	translate["scissors"] = SCISSORS;
+
 	for (map<string, Actions>::iterator it = translate.begin(); it != translate.cend(); ++it)
 		this->commands.push_back(it->first);
 }
@@ -48,6 +52,7 @@ Controller::~Controller()
 ParsedInput Controller::Parse(string input, list<string> targets)
 {
 	ParsedInput output;
+	string rest;
 
 	// Get the action
 	// we asume the action is the first word of the input
@@ -59,6 +64,7 @@ ParsedInput Controller::Parse(string input, list<string> targets)
 		if (input.substr(0, length) != (*it)) continue;
 				
 		output.action = translate[(*it)];
+		rest = input.substr(length, string::npos);
 		break;
 	}
 	if (output.action == NONE) return output;
@@ -67,11 +73,10 @@ ParsedInput Controller::Parse(string input, list<string> targets)
 	// Find the target
 	// TODO: Create a new action for when you input too many targets (?)
 	// TODO: Check actions that want 1 and actions that want 2 targets.
-
 	unsigned int index = string::npos;
 	for (list<string>::iterator it = targets.begin(); it != targets.cend(); ++it) 
 	{
-		size_t found = input.find((*it));
+		size_t found = rest.find((*it));
 
 		if (found != string::npos)
 		{

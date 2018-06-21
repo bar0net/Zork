@@ -7,13 +7,15 @@
 class Character : public Entity
 {
 	public:
-		Character(string name, string description) : Entity(name, description) { this->type = CHARACTER; };
+		Character(string name, string description, int health);
 		~Character() {};
 
-		bool Alive(void) { return health > 0; }
+		bool Alive(void);
+		void virtual Hit(void);
+		virtual void Die(void) {};
 
-	private:
-		int health = 5;
+	//private:
+		int health;
 
 };
 
