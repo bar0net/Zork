@@ -11,7 +11,7 @@
 
 World::World(void) 
 {
-	this->player = new Player("player", "I look wonderful in cargo shorts and a kaki shirt.", 7);
+	this->player = new Player("player", "I look wonderful in cargo shorts and a kaki shirt.", 6);
 
 	// Zones
 	Room* desert = new Room("desert", "You find yourself in front of the entrance of an ancent\n  tomb surrounded by miles of desert.");
@@ -245,7 +245,12 @@ void World::SearchEnemy(void)
 {
 	for (list<Entity*>::iterator it = current->contains.begin(); it != current->contains.cend(); ++it)
 	{
-		if ((*it)->type == ENEMY) this->enemy = (Enemy*)(*it);
+		if ((*it)->type == ENEMY) 
+		{
+			this->enemy = (Enemy*)(*it);
+			cout << endl << "  " << "As you enter, you can see the " << this->enemy->name << " defiant and you know it's time to"
+				"engage in the millenial tradition of Rock-Paper-Scissors combat to the death." << endl << endl << "  ";
+		}
 	}
 }
 
@@ -353,7 +358,7 @@ void World::FightState(ParsedInput msg)
 	else if (msg.action == SCISSORS) cout << "You show scissors ";
 	else 
 	{
-		cout << "You are in a life or death fight. Focus!" << endl << "  ";
+		cout << "You are in the middle of a Rock-Paper-Scissors combat to the death. Focus!" << endl << "  ";
 		return;
 	}
 
