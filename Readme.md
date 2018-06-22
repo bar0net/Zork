@@ -30,15 +30,7 @@ have been wise in terms of determining the needs I had for each class and commin
 
 ## Walkthrough
 ### MAP
-(dark chamber)===(    mural    )
-      ||               ||
-(  workshop  )   (   entrance  )===(rubble room)
-                       ||
-				 (    desert   )
-
-				      North
-			       West   East
-				      South
+![Map](/map.png)
 
 ### Blue orb
 
