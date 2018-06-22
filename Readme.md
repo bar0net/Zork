@@ -30,7 +30,7 @@ have been wise in terms of determining the needs I had for each class and commin
 
 ## Walkthrough
 ### MAP
-![Map](/map.png)
+![Map](map.png)
 
 ### Blue orb
 
@@ -81,7 +81,7 @@ Microsoft Visual Studio Community 2017
 Jordi Tudela Alcacer
 
 ## License
-This project is licensed under the MIT License - see the [LICENSE.md](/LICENSE.md) file for details
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
 
 ## Acknowledgements
 * [Zork](http://textadventures.co.uk/games/view/5zyoqrsugeopel3ffhz_vq/zork)
