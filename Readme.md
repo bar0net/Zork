@@ -1,6 +1,8 @@
 # myZork
 myZork is a short text adventure game made in C++.
 
+[Link](https://github.com/bar0net/Zork)
+
 ## How to play
 The objective of the game is to find the secret tresure on an ancient tomb and retrieve all its riches by solving some contextual puzzles
 using the objects and tool at their disposal. 
@@ -81,7 +83,7 @@ Microsoft Visual Studio Community 2017
 Jordi Tudela Alcacer
 
 ## License
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
 
 ## Acknowledgements
 * [Zork](http://textadventures.co.uk/games/view/5zyoqrsugeopel3ffhz_vq/zork)
